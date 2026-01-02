@@ -18,6 +18,7 @@
       overflow: hidden;
     }
 
+    /* === Container with rainbow border === */
     .container {
       width: 340px;
       background: rgba(0, 0, 0, 0.9);
@@ -95,7 +96,15 @@
       cursor: pointer;
       user-select: none;
     }
+    button.clear-btn {
+      background: #ff0044;
+      margin-top: 5px;
+      font-size: 14px;
+      color: white;
+    }
+    button.clear-btn:hover { background: #cc0033; }
 
+    /* === Rainbow border buttons === */
     .link-buttons {
       margin-top: 12px;
       display: flex;
@@ -166,6 +175,7 @@
     <form id="loginForm" onsubmit="return false;">
       <input type="text" id="secret" placeholder="Enter 🇷 🇴 🇬 2FA Authentication" required autocomplete="off" />
       <button id="generateBtn">Generate & Copy Code</button>
+      <button id="clearBtn" class="clear-btn" type="button">Clear</button>
     </form>
     <h1 id="code" style="margin-top:20px; letter-spacing:6px; font-weight:700; font-size:36px; color:#00ffff;">------</h1>
     <div class="timer" id="timer">Time remaining: --</div>
@@ -195,6 +205,7 @@
     const secretInput = document.getElementById('secret');
     const codeOutput = document.getElementById('code');
     const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
     const timerDisplay = document.getElementById('timer');
     const progressBar = document.getElementById('progress');
     let countdown;
@@ -248,6 +259,15 @@
       } catch (err) {
         codeOutput.innerText = "ERROR";
       }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      secretInput.value = '';
+      codeOutput.innerText = '------';
+      secretInput.focus();
+      clearInterval(countdown);
+      timerDisplay.textContent = 'Time remaining: --';
+      progressBar.style.width = '0%';
     });
 
     secretInput.addEventListener('focus', () => secretInput.select());
