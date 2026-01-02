@@ -1,277 +1,277 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>💁🇷 🇴 🇬 FB TEAM🏆 2FA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #000428, #004e92);
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-<title>💁🇷 🇴 🇬 FB TEAM🏆 2FA</title>
+    /* === Container with rainbow border === */
+    .container {
+      width: 340px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 40px 30px;
+      border-radius: 16px;
+      text-align: center;
+      position: relative;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 18px;
+      background: linear-gradient(
+        270deg,
+        red, orange, yellow, green, cyan, blue, violet, red
+      );
+      background-size: 400% 400%;
+      animation: rainbowBorder 5s linear infinite;
+      z-index: -1;
+    }
+    .container::after {
+      content: "";
+      position: absolute;
+      top: 2px; left: 2px; right: 2px; bottom: 2px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: -1;
+    }
 
-<style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+    @keyframes rainbowBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  position:fixed;
-  overflow:hidden;
-  font-family:'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#000428,#004e92);
-  color:#eee;
-}
+    @keyframes glow {
+      from { text-shadow: 0 0 4px #facc15, 0 0 8px #facc15; }
+      to { text-shadow: 0 0 16px #facc15, 0 0 24px #facc15; }
+    }
 
-/* ===== LOCK CENTER ===== */
-.container{
-  width:340px;
-  padding:38px 28px;
-  background:rgba(0,0,0,.92);
-  border-radius:18px;
-  text-align:center;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  overflow:hidden;
-}
+    .team-title {
+      color: #facc15;
+      margin-bottom: 24px;
+      font-size: 24px;
+      font-weight: bold;
+      animation: glow 2s infinite alternate;
+      user-select: none;
+    }
 
-/* ===== RAINBOW BORDER ===== */
-.container::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:20px;
-  background:linear-gradient(
-    270deg,red,orange,yellow,green,cyan,blue,violet,red
-  );
-  background-size:400% 400%;
-  animation:rb 5s linear infinite;
-  z-index:-1;
-}
-.container::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  background:#050505;
-  border-radius:14px;
-  z-index:-1;
-}
-@keyframes rb{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    input {
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #00ffff;
+      background: #1a1a1a;
+      color: #00ffff;
+      font-size: 16px;
+      outline: none;
+      width: 100%;
+    }
+    button {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    button.clear-btn {
+      background: #ff0044;
+      margin-top: 5px;
+      font-size: 14px;
+      color: white;
+    }
+    button.clear-btn:hover { background: #cc0033; }
 
-/* ===== TITLE ===== */
-.team-title{
-  color:#facc15;
-  font-size:24px;
-  font-weight:700;
-  margin-bottom:22px;
-  animation:glow 2s infinite alternate;
-  user-select:none;
-}
-@keyframes glow{
-  from{text-shadow:0 0 6px #facc15}
-  to{text-shadow:0 0 22px #facc15}
-}
+    /* === Rainbow border buttons === */
+    .link-buttons {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .link-buttons a {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      font-weight: bold;
+      text-decoration: none;
+      position: relative;
+      border-radius: 10px;
+      color: white;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .link-buttons a::before {
+      content: "";
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      border-radius: 12px;
+      background: linear-gradient(
+        270deg,
+        red, orange, yellow, green, cyan, blue, violet, red
+      );
+      background-size: 400% 400%;
+      animation: rainbowBorder 5s linear infinite;
+      z-index: -1;
+    }
+    .link-buttons a::after {
+      content: "";
+      position: absolute;
+      top: 2px; left: 2px; right: 2px; bottom: 2px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: -1;
+    }
 
-/* ===== FORM ===== */
-form{display:flex;flex-direction:column;gap:14px}
+    .timer {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #00ffff;
+    }
+    .progress-bar {
+      height: 4px;
+      background: rgba(0, 255, 255, 0.2);
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background: #00ffff;
+      width: 100%;
+      transition: width 1s linear;
+    }
 
-input{
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid #00ffff;
-  background:#111;
-  color:#00ffff;
-  font-size:16px;
-  outline:none;
-  text-align:center;
-}
-
-button{
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  color:#fff;
-  transition:.2s;
-}
-button:active{transform:scale(.97)}
-
-#gen{
-  background:linear-gradient(90deg,#00c6ff,#0072ff);
-}
-#clear{
-  background:#ff0044;
-  font-size:14px;
-}
-
-/* ===== OTP ===== */
-#code{
-  margin:20px 0 10px;
-  font-size:36px;
-  letter-spacing:6px;
-  color:#00ffff;
-  font-weight:700;
-  user-select:text;
-  transition:.2s;
-}
-.flash{animation:flash .3s}
-@keyframes flash{
-  from{color:#fff}
-  to{color:#00ffff}
-}
-
-/* ===== TIMER ===== */
-.timer{font-size:14px;color:#00ffff}
-.bar{
-  height:4px;
-  background:rgba(0,255,255,.2);
-  margin-top:8px;
-  border-radius:3px;
-  overflow:hidden;
-}
-.fill{
-  height:100%;
-  width:100%;
-  background:#00ffff;
-  transition:width .2s linear,background .2s;
-}
-
-/* ===== LINKS ===== */
-.links{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-}
-.links a{
-  flex:1;
-  padding:12px;
-  text-decoration:none;
-  color:#fff;
-  font-weight:700;
-  position:relative;
-  border-radius:10px;
-  overflow:hidden;
-}
-.links a::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:linear-gradient(
-    270deg,red,orange,yellow,green,cyan,blue,violet,red
-  );
-  background-size:400% 400%;
-  animation:rb 5s linear infinite;
-  z-index:-1;
-}
-.links a::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  background:#000;
-  border-radius:8px;
-  z-index:-1;
-}
-
-@media(max-width:400px){
-  .container{width:90%}
-}
-</style>
+    @media(max-width: 400px) {
+      .container { width: 90%; padding: 30px 20px; }
+    }
+  </style>
 </head>
-
-<body oncontextmenu="return false">
-
-<div class="container">
-  <div class="team-title">💁🇷 🇴 🇬 FB TEAM🏆</div>
-
-  <form onsubmit="return false">
-    <input id="secret" placeholder="Enter 🇷 🇴 🇬 2FA Authentication" autocomplete="off">
-    <button id="gen">Generate & Copy Code</button>
-    <button id="clear" type="button">Clear</button>
-  </form>
-
-  <div id="code">------</div>
-
-  <div class="timer" id="timer">Time remaining: --</div>
-  <div class="bar"><div class="fill" id="fill"></div></div>
-
-  <div class="links">
-    <a href="https://t.me/rogfbteam" target="_blank">💁🇷 🇴 🇬</a>
-    <a href="https://t.me/rogfbteam" target="_blank">FB TEAM🏆</a>
+<body>
+  <div class="container">
+    <div class="team-title">💁🇷 🇴 🇬 FB TEAM🏆</div>
+    <form id="loginForm" onsubmit="return false;">
+      <input type="text" id="secret" placeholder="Enter 🇷 🇴 🇬 2FA Authentication" required autocomplete="off" />
+      <button id="generateBtn">Generate & Copy Code</button>
+      <button id="clearBtn" class="clear-btn" type="button">Clear</button>
+    </form>
+    <h1 id="code" style="margin-top:20px; letter-spacing:6px; font-weight:700; font-size:36px; color:#00ffff;">------</h1>
+    <div class="timer" id="timer">Time remaining: --</div>
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+    <div class="link-buttons">
+      <a href="https://t.me/rogfbteam" target="_blank">💁🇷 🇴 🇬</a>
+      <a href="https://t.me/rogfbteam" target="_blank">FB TEAM🏆</a>
+    </div>
   </div>
-</div>
 
-<script>
-const secret=document.getElementById("secret"),
-code=document.getElementById("code"),
-timer=document.getElementById("timer"),
-fill=document.getElementById("fill");
+  <script>
+    function base32ToBytes(base32) {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+      let bits = '';
+      for (let i = 0; i < base32.length; i++) {
+        const val = alphabet.indexOf(base32[i].toUpperCase());
+        if (val === -1) continue;
+        bits += val.toString(2).padStart(5, '0');
+      }
+      const bytes = [];
+      for (let i = 0; i + 8 <= bits.length; i += 8) {
+        bytes.push(parseInt(bits.slice(i, i + 8), 2));
+      }
+      return new Uint8Array(bytes);
+    }
 
-let interval;
+    const secretInput = document.getElementById('secret');
+    const codeOutput = document.getElementById('code');
+    const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const timerDisplay = document.getElementById('timer');
+    const progressBar = document.getElementById('progress');
+    let countdown;
 
-function b32(s){
- const a="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";let b="";
- for(let c of s){let v=a.indexOf(c);if(v>-1)b+=v.toString(2).padStart(5,0)}
- let arr=[];for(let i=0;i+8<=b.length;i+=8)arr.push(parseInt(b.slice(i,i+8),2))
- return new Uint8Array(arr)
-}
+    function startCountdown(generationTime) {
+      clearInterval(countdown);
+      const intervalStart = Math.floor(generationTime / 30) * 30;
+      const endTime = intervalStart + 30;
+      function updateTimer() {
+        const now = Math.floor(Date.now() / 1000);
+        let secondsRemaining = endTime - now;
+        if (secondsRemaining <= 0) {
+          clearInterval(countdown);
+          timerDisplay.textContent = 'Time remaining: --';
+          progressBar.style.width = '0%';
+          return;
+        }
+        timerDisplay.textContent = `Time remaining: ${secondsRemaining}s`;
+        const progressPercentage = (secondsRemaining / 30) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+        progressBar.style.background = secondsRemaining < 10 ? '#ff5555' : '#00ffff';
+      }
+      updateTimer();
+      countdown = setInterval(updateTimer, 200);
+    }
 
-document.getElementById("gen").onclick=async()=>{
- if(!secret.value.trim())return;
- navigator.vibrate?.(30);
- try{
-  const key=b32(secret.value.replace(/\s+/g,"").toUpperCase());
-  const t=Math.floor(Date.now()/1000/30);
-  const buf=new ArrayBuffer(8);
-  new DataView(buf).setUint32(4,t);
-  const k=await crypto.subtle.importKey("raw",key,{name:"HMAC",hash:"SHA-1"},false,["sign"]);
-  const h=new Uint8Array(await crypto.subtle.sign("HMAC",k,buf));
-  const o=h[19]&15;
-  const bin=((h[o]&127)<<24)|(h[o+1]<<16)|(h[o+2]<<8)|h[o+3];
-  const otp=(bin%1e6).toString().padStart(6,"0");
-  code.textContent=otp;
-  code.classList.add("flash");
-  navigator.clipboard.writeText(otp);
-  setTimeout(()=>code.classList.remove("flash"),300);
-  start();
- }catch{code.textContent="ERROR"}
-}
+    generateBtn.addEventListener('click', async () => {
+      const secret = secretInput.value.trim().replace(/\s+/g, '');
+      if (!secret) return;
+      try {
+        const key = base32ToBytes(secret);
+        const epoch = Math.floor(Date.now() / 1000);
+        const time = Math.floor(epoch / 30);
+        const msg = new ArrayBuffer(8);
+        new DataView(msg).setUint32(4, time);
 
-document.getElementById("clear").onclick=()=>{
- secret.value="";
- code.textContent="------";
- timer.textContent="Time remaining: --";
- fill.style.width="0%";
- clearInterval(interval);
-}
+        const cryptoKey = await crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]);
+        const hmac = await crypto.subtle.sign("HMAC", cryptoKey, msg);
+        const hmacBytes = new Uint8Array(hmac);
+        const offset = hmacBytes[19] & 0xf;
+        const bin_code = (
+          ((hmacBytes[offset] & 0x7f) << 24) |
+          ((hmacBytes[offset + 1] & 0xff) << 16) |
+          ((hmacBytes[offset + 2] & 0xff) << 8) |
+          (hmacBytes[offset + 3] & 0xff)
+        );
+        const otp = (bin_code % 1000000).toString().padStart(6, '0');
+        codeOutput.innerText = otp;
+        await navigator.clipboard.writeText(otp);
+        startCountdown(Math.floor(Date.now() / 1000));
+      } catch (err) {
+        codeOutput.innerText = "ERROR";
+      }
+    });
 
-function start(){
- clearInterval(interval);
- const end=Math.floor(Date.now()/1000/30)*30+30;
- interval=setInterval(()=>{
-  const left=end-Math.floor(Date.now()/1000);
-  if(left<=0){
-   clearInterval(interval);
-   timer.textContent="Time remaining: --";
-   fill.style.width="0%";
-   return;
-  }
-  timer.textContent="Time remaining: "+left+"s";
-  fill.style.width=(left/30*100)+"%";
-  fill.style.background=left<=5?"#ff4444":"#00ffff";
- },200);
-}
+    clearBtn.addEventListener('click', () => {
+      secretInput.value = '';
+      codeOutput.innerText = '------';
+      secretInput.focus();
+      clearInterval(countdown);
+      timerDisplay.textContent = 'Time remaining: --';
+      progressBar.style.width = '0%';
+    });
 
-secret.onfocus=()=>secret.select();
-</script>
-
+    secretInput.addEventListener('focus', () => secretInput.select());
+    secretInput.addEventListener('click', () => secretInput.select());
+  </script>
 </body>
 </html>
