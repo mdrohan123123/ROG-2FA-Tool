@@ -2,678 +2,548 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>ROG · stealth | CYBER TOTP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="🇷 🇴 🇬 2FA Generator - Professional Authentication Tool">
-    <meta name="keywords" content="2FA, OTP, Authenticator, Security, 🇷 🇴 🇬">
-    <meta name="author" content="🇷 🇴 🇬">
-    <title>🔐 🇷 🇴 🇬 2FA Generator</title>
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
+    <!-- Poppins & Orbitron for cyber vibe -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free) for slick icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* CSS Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        :root {
-            --primary: #2563EB;
-            --primary-dark: #1E40AF;
-            --primary-light: #3B82F6;
-            --secondary: #10B981;
-            --accent: #8B5CF6;
-            --dark: #0F172A;
-            --darker: #0A0F1C;
-            --light: #F8FAFC;
-            --gray: #64748B;
-            --gray-light: #E2E8F0;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --error: #EF4444;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            --shadow-xl: 0 35px 60px -15px rgba(0, 0, 0, 0.7);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1E293B 100%);
+            background: radial-gradient(circle at 10% 20%, #0b0e19, #020308);
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
-            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
             overflow-x: hidden;
-            position: relative;
-            width: 100%;
         }
 
+        /* Animated cyber grid background */
         body::before {
-            content: '';
+            content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
-            z-index: -1;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridMove 12s linear infinite;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--primary), var(--accent));
-            border-radius: 10px;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px;
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            padding: 30px 15px;
-            background: linear-gradient(135deg, 
-                rgba(37, 99, 235, 0.1) 0%, 
-                rgba(30, 64, 175, 0.2) 50%, 
-                rgba(15, 23, 42, 0.3) 100%);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--primary), 
-                var(--accent), 
-                var(--secondary), 
-                transparent);
-            animation: headerShine 3s linear infinite;
-        }
-
-        @keyframes headerShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .logo-container {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+        /* floating glitch orbs */
+        .glow-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at 30% 30%, rgba(20, 180, 230, 0.15), transparent 70%);
             border-radius: 50%;
-            margin-bottom: 15px;
+            filter: blur(50px);
+            z-index: 0;
+            animation: orbFloat 20s infinite alternate ease-in-out;
+        }
+        .orb1 { top: -100px; left: -100px; background: radial-gradient(circle, #00ffff15, #0044ff15); }
+        .orb2 { bottom: -150px; right: -50px; width: 400px; height: 400px; background: radial-gradient(circle, #aa00ff15, #ff006615); animation-duration: 25s; }
+        
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            100% { transform: translate(80px, 60px) scale(1.3); opacity: 0.8; }
+        }
+
+        /* MAIN CARD — NEON BEAST */
+        .rog-card {
             position: relative;
-            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
-            transition: var(--transition);
-        }
-
-        .logo-container:hover {
-            transform: scale(1.05) rotate(5deg);
-            box-shadow: 0 15px 50px rgba(37, 99, 235, 0.6);
-        }
-
-        .logo-container i {
-            font-size: 32px;
-            color: white;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        .brand-name {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #FFFFFF, var(--primary-light), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-            line-height: 1;
-            padding: 0 10px;
-        }
-
-        .brand-subtitle {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--gray-light);
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            position: relative;
-            display: inline-block;
-        }
-
-        .brand-subtitle::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .version-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--secondary), #059669);
-            color: white;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Main Grid Layout */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
-            flex: 1;
+            z-index: 10;
+            max-width: 560px;
             width: 100%;
+            background: rgba(8, 15, 26, 0.75);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            border-radius: 58px;
+            padding: 32px 28px 42px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.8),
+                0 0 0 2px rgba(0, 255, 255, 0.1) inset,
+                0 0 40px #00ffff33;
+            animation: cardPulse 6s infinite alternate;
         }
 
-        /* Left Panel - Main Content */
-        .main-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-            padding: 25px;
-            box-shadow: var(--shadow-lg);
-            width: 100%;
+        @keyframes cardPulse {
+            0% { box-shadow: 0 20px 40px #000, 0 0 0 2px #00ffff1a inset, 0 0 30px #00ffff22; }
+            100% { box-shadow: 0 30px 60px #000c, 0 0 0 3px #ff66ff1a inset, 0 0 60px #ff00ff33; }
         }
 
-        /* Input Section */
-        .input-section {
-            margin-bottom: 25px;
-        }
-
-        .section-label {
+        /* ROG header with glitch */
+        .cyber-header {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .section-label i {
-            font-size: 1.2rem;
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.1);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            flex-shrink: 0;
-        }
-
-        .section-label span {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--light);
-            word-break: break-word;
-        }
-
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        #secretKey {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            font-family: 'Inter', monospace;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--light);
-            transition: var(--transition);
-            min-height: 56px;
-        }
-
-        #secretKey:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.1);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-        }
-
-        #secretKey::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-            width: 100%;
-        }
-
-        .action-btn {
-            padding: 18px 15px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            min-height: 56px;
-        }
-
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.6s;
-        }
-
-        .action-btn:hover::before {
-            left: 100%;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .paste-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-
-        .generate-btn {
-            background: linear-gradient(135deg, var(--secondary), #059669);
-            color: white;
-        }
-
-        .copy-btn {
-            background: linear-gradient(135deg, var(--accent), #7C3AED);
-            color: white;
-        }
-
-        .btn-icon {
-            font-size: 1.2rem;
-        }
-
-        /* Code Display */
-        .code-display-container {
-            background: linear-gradient(135deg, 
-                rgba(37, 99, 235, 0.1) 0%, 
-                rgba(15, 23, 42, 0.2) 100%);
-            border-radius: var(--radius-lg);
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .code-display-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                var(--primary), 
-                var(--accent), 
-                var(--secondary));
-        }
-
-        .code-header {
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
-            gap: 15px;
+            margin-bottom: 30px;
+            padding: 0 8px;
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 1px dashed #00ffff40;
+            padding-bottom: 16px;
         }
 
-        .code-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.2rem;
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rog-icon {
+            font-size: 2.8rem;
+            color: #00ffff;
+            filter: drop-shadow(0 0 10px cyan);
+            animation: rotateLight 4s infinite linear;
+        }
+        @keyframes rotateLight {
+            0% { filter: drop-shadow(0 0 5px cyan) hue-rotate(0deg); }
+            100% { filter: drop-shadow(0 0 15px magenta) hue-rotate(30deg); }
+        }
+
+        .rog-text {
+            font-weight: 900;
+            font-size: 1.7rem;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, #aaffff, #c792ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff60;
+        }
+        .stealth-tag {
+            font-size: 0.8rem;
+            color: #94f0f0;
+            border: 1px solid #00ffff60;
+            border-radius: 40px;
+            padding: 6px 16px;
+            background: #101a24;
+            letter-spacing: 2px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* time & code display */
+        .totp-panel {
+            background: #03070fb3;
+            border-radius: 48px;
+            padding: 20px 24px;
+            border: 1px solid #00ffff30;
+            margin-bottom: 28px;
+            box-shadow: 0 0 30px #00ffff15, inset 0 0 10px #ffffff0d;
+            backdrop-filter: blur(8px);
+        }
+
+        .code-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .code-label {
+            color: #a2d8ff;
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 2.5px;
+            opacity: 0.8;
+        }
+        .code-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.9rem;
             font-weight: 700;
-            color: var(--light);
-            text-align: center;
+            background: linear-gradient(135deg, #e0f2ff, #b7f0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px #0ff, 0 0 40px #f0f;
+            line-height: 1.2;
         }
 
-        .code-timer {
+        /* timer bar */
+        .timer-container {
+            margin-top: 10px;
+        }
+        .timer-info {
+            display: flex;
+            justify-content: space-between;
+            color: #9fc9ff;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .timer-bg {
+            width: 100%;
+            height: 8px;
+            background: #1f3340;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 6px cyan;
+        }
+        .timer-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #00f0ff, #b76eff);
+            border-radius: 20px;
+            box-shadow: 0 0 15px #00f7ff;
+            transition: width 0.2s linear;
+        }
+
+        /* secret input area — futuristic */
+        .input-section {
+            margin-bottom: 28px;
+        }
+        .input-label {
+            color: #b7e1ff;
+            margin-left: 12px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px 16px;
-            border-radius: 50px;
+        }
+        .input-label i {
+            color: #0ff;
+        }
+        .secret-field {
+            width: 100%;
+            padding: 20px 26px;
+            background: #0b131fb3;
+            border: 2px solid #00ffff60;
+            border-radius: 60px;
+            font-family: 'Poppins', monospace;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #efff;
+            text-align: center;
+            letter-spacing: 3px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 0 2px #00ffff20 inset, 0 10px 25px #00000080;
+            transition: 0.2s;
+            caret-color: #0ff;
+        }
+        .secret-field:focus {
+            border-color: #ff80ff;
+            box-shadow: 0 0 20px #ff80ff, 0 0 0 3px #ff00ff40 inset;
+            outline: none;
+        }
+        .secret-field::placeholder {
+            color: #00ffffa0;
+            font-weight: 300;
+            font-size: 1rem;
+            text-shadow: 0 0 8px #0ff;
+            letter-spacing: 4px;
         }
 
-        #timeLeft {
-            font-family: 'Poppins', monospace;
-            font-size: 1.1rem;
+        /* double button row — slick */
+        .action-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .cyber-btn {
+            flex: 1 1 180px;
+            background: rgba(8, 25, 40, 0.7);
+            border: 1px solid #00ffff;
+            color: #f0fcff;
+            font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            color: var(--primary-light);
-        }
-
-        .code-display {
-            text-align: center;
-            padding: 25px 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: var(--radius-md);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .code-display::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            animation: codeShine 3s infinite;
-        }
-
-        @keyframes codeShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        #generatedCode {
-            font-family: 'Poppins', monospace;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--light);
-            letter-spacing: 8px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            position: relative;
-            z-index: 1;
-            word-break: break-all;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .progress-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-        }
-
-        #progressFill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 100%;
-            transition: width 1s linear;
-            position: relative;
-        }
-
-        #progressFill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: progressShine 2s infinite linear;
-        }
-
-        @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* Right Panel - Features */
-        .features-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-            padding: 25px;
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-        }
-
-        .features-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--light);
-            margin-bottom: 20px;
-            text-align: center;
-            position: relative;
-            padding-bottom: 12px;
-        }
-
-        .features-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 2px;
-        }
-
-        .features-grid {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
-        }
-
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 12px;
-            width: 50px;
-            height: 50px;
+            font-size: 1.1rem;
+            padding: 18px 10px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(37, 99, 235, 0.1);
-            border-radius: 10px;
+            gap: 12px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 15px #00ffff40, 0 5px 10px #00000060;
+            text-transform: uppercase;
         }
-
-        .feature-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--light);
-            margin-bottom: 8px;
+        .cyber-btn i {
+            font-size: 1.4rem;
+            filter: drop-shadow(0 0 6px currentColor);
         }
-
-        .feature-desc {
-            color: var(--gray-light);
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .cyber-btn.paste {
+            border-color: #0ff;
+            color: #0ff;
         }
-
-        /* Security Banner */
-        .security-banner {
-            background: linear-gradient(135deg, 
-                rgba(239, 68, 68, 0.1) 0%, 
-                rgba(239, 68, 68, 0.2) 100%);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-top: 25px;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .security-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--error), 
-                transparent);
-        }
-
-        .security-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            text-align: center;
-        }
-
-        .security-icon {
-            font-size: 2.5rem;
-            color: var(--error);
-            flex-shrink: 0;
-        }
-
-        .security-text h3 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
+        .cyber-btn.paste:hover {
+            background: #0ff1a;
+            box-shadow: 0 0 30px cyan, 0 0 60px blue;
+            border-color: white;
             color: white;
-            margin-bottom: 8px;
+            transform: scale(1.02);
+        }
+        .cyber-btn.clear {
+            border-color: #ff66aa;
+            color: #ffb0dd;
+        }
+        .cyber-btn.clear:hover {
+            background: #ff149350;
+            box-shadow: 0 0 30px #ff1493, 0 0 60px #ff00aa;
+            border-color: #fff;
+            color: white;
+            transform: scale(1.02);
         }
 
-        .security-text p {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.5;
-            font-size: 0.9rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: linear-gradient(135deg, 
-                rgba(15, 23, 42, 0.8) 0%, 
-                rgba(30, 41, 59, 0.8) 100%);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            padding: 30px 20px;
+        /* bottom glitch note */
+        .foot-note {
+            display: flex;
+            justify-content: space-between;
             margin-top: 30px;
-            border: 1px solid var(--glass-border);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
+            color: #5d8b9b;
+            font-size: 0.7rem;
+            border-top: 1px dashed #00ffff40;
+            padding-top: 18px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .foot-note span {
+            color: #00ffff;
+            text-shadow: 0 0 5px cyan;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                var(--primary), 
-                var(--accent), 
-                var(--secondary));
+        /* mobile fine-tune */
+        @media (max-width: 460px) {
+            .rog-card { padding: 22px 16px; border-radius: 40px; }
+            .code-value { font-size: 2rem; letter-spacing: 4px; }
+            .secret-field { font-size: 1rem; padding: 16px 18px; }
+            .cyber-btn { font-size: 0.9rem; padding: 14px 6px; }
+            .rog-text { font-size: 1.3rem; }
         }
+    </style>
+    <!-- CryptoJS for TOTP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+    <!-- animated orbs -->
+    <div class="glow-orb orb1"></div>
+    <div class="glow-orb orb2"></div>
 
-        .footer-logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background
+    <div class="rog-card">
+        <!-- cyber header -->
+        <div class="cyber-header">
+            <div class="logo-group">
+                <i class="fas fa-skull rog-icon"></i>
+                <span class="rog-text">ROG·STEALTH</span>
+            </div>
+            <div class="stealth-tag"><i class="fa-regular fa-eye-slash"></i>  FB TEAM</div>
+        </div>
+
+        <!-- TOTP display panel with live update -->
+        <div class="totp-panel" id="totpDisplayPanel">
+            <div class="code-row">
+                <span class="code-label"><i class="fa-regular fa-clock"></i>  CURRENT TOTP</span>
+                <span class="code-value" id="totpCode">------</span>
+            </div>
+            <!-- timer bar with seconds -->
+            <div class="timer-container">
+                <div class="timer-info">
+                    <span><i class="fa-regular fa-hourglass-half"></i>  REFRESH IN</span>
+                    <span id="timerSeconds">30s</span>
+                </div>
+                <div class="timer-bg">
+                    <div class="timer-fill" id="timerFill" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- secret input field (only thing we need, but we keep it) -->
+        <div class="input-section">
+            <div class="input-label"><i class="fa-regular fa-keyboard"></i>  SECRET KEY (BASE32)</div>
+            <input type="text" id="twofa" class="secret-field" placeholder="🇷 🇴 🇬  PASTE 2FA  →  AUTO COPY" autocomplete="off">
+        </div>
+
+        <!-- action buttons (paste / clear) with beautiful animation -->
+        <div class="action-grid">
+            <button class="cyber-btn paste" id="miniPasteBtn"><i class="fa-regular fa-clipboard"></i> PASTE</button>
+            <button class="cyber-btn clear" id="miniClearBtn"><i class="fa-regular fa-trash-can"></i> CLEAR</button>
+        </div>
+
+        <!-- footer glitch -->
+        <div class="foot-note">
+            <span>✧ 2FA AUTO-COPY ✧</span>
+            <span><i class="fa-regular fa-bolt"></i>  STEALTH MODE</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // ---------- CORE TOTP ----------
+            function base32Decode(base32) {
+                const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                base32 = base32.replace(/\s+/g, '').replace(/=+$/, '').toUpperCase();
+                let bits = 0, value = 0, output = [];
+                for (let i = 0; i < base32.length; i++) {
+                    const char = base32[i];
+                    const index = alphabet.indexOf(char);
+                    if (index === -1) throw new Error('Invalid Base32');
+                    value = (value << 5) | index;
+                    bits += 5;
+                    if (bits >= 8) {
+                        output.push((value >>> (bits - 8)) & 0xFF);
+                        bits -= 8;
+                    }
+                }
+                return new Uint8Array(output);
+            }
+
+            function generateTOTP(secret) {
+                const key = base32Decode(secret);
+                const keyWA = CryptoJS.lib.WordArray.create(key);
+                const timeStep = 30;
+                const counter = Math.floor(Date.now() / 1000 / timeStep);
+                const counterBytes = new ArrayBuffer(8);
+                const counterView = new DataView(counterBytes);
+                counterView.setUint32(4, counter, false); // big-endian
+                const counterWA = CryptoJS.lib.WordArray.create(new Uint8Array(counterBytes));
+                const hmac = CryptoJS.HmacSHA1(counterWA, keyWA);
+                const hmacHex = hmac.toString(CryptoJS.enc.Hex);
+                const offset = parseInt(hmacHex.substr(39, 1), 16) * 2;
+                const otpHex = hmacHex.substr(offset, 8);
+                let otp = parseInt(otpHex, 16) & 0x7FFFFFFF;
+                otp = otp % 1000000;
+                return otp.toString().padStart(6, '0');
+            }
+
+            // ------- DOM refs -------
+            const inputField = document.getElementById('twofa');
+            const totpCodeSpan = document.getElementById('totpCode');
+            const timerFill = document.getElementById('timerFill');
+            const timerSecondsSpan = document.getElementById('timerSeconds');
+
+            let currentSecret = '';
+            let timerInterval = null;
+            let otpCache = '------';
+
+            // update UI with latest OTP (and copy to clipboard)
+            function updateDisplayAndCopy(secret) {
+                if (!secret || secret.length < 16) {
+                    totpCodeSpan.innerText = '------';
+                    return;
+                }
+                try {
+                    const code = generateTOTP(secret);
+                    totpCodeSpan.innerText = code;
+                    otpCache = code;
+                    // auto copy to clipboard
+                    navigator.clipboard.writeText(code).catch(() => {
+                        // fallback
+                        const el = document.createElement('textarea');
+                        el.value = code;
+                        document.body.appendChild(el);
+                        el.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(el);
+                    });
+                } catch (e) {
+                    totpCodeSpan.innerText = 'ERROR';
+                    console.warn('TOTP error', e);
+                }
+            }
+
+            // timer update (every second)
+            function updateTimerAndOtp() {
+                const nowSec = Math.floor(Date.now() / 1000);
+                const step = 30;
+                const counter = Math.floor(nowSec / step);
+                const remaining = step - (nowSec % step);
+                const percent = (remaining / step) * 100;
+                timerFill.style.width = percent + '%';
+                timerSecondsSpan.innerText = remaining + 's';
+
+                //もし残り時間が29秒だったら再生成 (または新しい周期の最初)
+                // we generate at 30 and 0 to be safe, but best: when remaining === 30 or 29, we regenerate
+                if (currentSecret && currentSecret.length >= 16) {
+                    if (remaining === 30 || remaining === 29) {
+                        // slight delay to avoid double generation
+                        updateDisplayAndCopy(currentSecret);
+                    } else if (remaining === 1) {
+                        // also right before expiry (to be smooth)
+                        updateDisplayAndCopy(currentSecret);
+                    }
+                } else {
+                    totpCodeSpan.innerText = '------';
+                }
+            }
+
+            function startTimer() {
+                stopTimer();
+                // initial update
+                if (currentSecret && currentSecret.length >= 16) {
+                    updateDisplayAndCopy(currentSecret);
+                }
+                timerInterval = setInterval(() => {
+                    updateTimerAndOtp();
+                }, 200); // smooth timer bar
+            }
+
+            function stopTimer() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+            }
+
+            // when secret changes (manual or paste)
+            function onSecretInput() {
+                const raw = inputField.value.trim();
+                if (raw.length >= 16) {
+                    currentSecret = raw;
+                    updateDisplayAndCopy(currentSecret);
+                    startTimer(); // ensures timer runs
+                } else {
+                    currentSecret = '';
+                    totpCodeSpan.innerText = '------';
+                    stopTimer();
+                    // reset timer visuals
+                    timerFill.style.width = '100%';
+                    timerSecondsSpan.innerText = '30s';
+                }
+            }
+
+            // clear all
+            function clearAll() {
+                inputField.value = '';
+                currentSecret = '';
+                totpCodeSpan.innerText = '------';
+                stopTimer();
+                timerFill.style.width = '100%';
+                timerSecondsSpan.innerText = '30s';
+            }
+
+            // PASTE from clipboard (advanced)
+            async function pasteFromClipboard() {
+                try {
+                    const text = await n
