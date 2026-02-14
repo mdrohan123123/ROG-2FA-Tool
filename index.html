@@ -2,15 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ROG · stealth | CYBER TOTP</title>
+    <title>ROG FB TEAM· stealth</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Poppins & Orbitron for cyber vibe -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (free) for slick icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ---------- TOTAL MINIMAL: ONLY INPUT AT VERY TOP, NO EXTRA SPACE ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -18,415 +13,290 @@
         }
 
         body {
-            background: radial-gradient(circle at 10% 20%, #0b0e19, #020308);
+            background-color: #0c0f1a;
             font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
             min-height: 100vh;
-            display: flex;
+            margin: 0;
+            padding: 0;
+            opacity: 1;
+        }
+
+        /* ---------- EVERYTHING HIDDEN EXCEPT LOGO-BOX ---------- */
+        .header, .main-box, .footer, .datetime, .btn, .code-display, .timer-bar,
+        .scroll-text, h2, button:not(#miniClearBtn):not(#miniPasteBtn), .footer div, .logo-text,
+        br, hr, [class*="Appear"], [class*="pulse"], .btn.red, .btn, .main-box * {
+            display: none !important;
+        }
+
+        /* ---------- THE ONLY VISIBLE CONTAINER: LOGO-BOX ---------- */
+        .logo-box {
+            display: flex !important;
+            visibility: visible !important;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            width: 100%;
+            max-width: 500px;  /* একটু বড় করলাম */
+            margin: 0 auto;
+            padding: 0 15px;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            transform: none !important;
+            animation: none !important;
             position: relative;
-            overflow-x: hidden;
+            top: 0;
+            left: 0;
+            right: 0;
         }
 
-        /* Animated cyber grid background */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
-            animation: gridMove 12s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        /* floating glitch orbs */
-        .glow-orb {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle at 30% 30%, rgba(20, 180, 230, 0.15), transparent 70%);
-            border-radius: 50%;
-            filter: blur(50px);
-            z-index: 0;
-            animation: orbFloat 20s infinite alternate ease-in-out;
-        }
-        .orb1 { top: -100px; left: -100px; background: radial-gradient(circle, #00ffff15, #0044ff15); }
-        .orb2 { bottom: -150px; right: -50px; width: 400px; height: 400px; background: radial-gradient(circle, #aa00ff15, #ff006615); animation-duration: 25s; }
-        
-        @keyframes orbFloat {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-            100% { transform: translate(80px, 60px) scale(1.3); opacity: 0.8; }
-        }
-
-        /* MAIN CARD — NEON BEAST */
-        .rog-card {
-            position: relative;
-            z-index: 10;
-            max-width: 560px;
+        /* input field */
+        #twofa {
+            display: block !important;
+            visibility: visible !important;
             width: 100%;
-            background: rgba(8, 15, 26, 0.75);
-            backdrop-filter: blur(14px) saturate(180%);
-            -webkit-backdrop-filter: blur(14px) saturate(180%);
-            border: 1px solid rgba(0, 255, 255, 0.25);
-            border-radius: 58px;
-            padding: 32px 28px 42px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.8),
-                0 0 0 2px rgba(0, 255, 255, 0.1) inset,
-                0 0 40px #00ffff33;
-            animation: cardPulse 6s infinite alternate;
-        }
-
-        @keyframes cardPulse {
-            0% { box-shadow: 0 20px 40px #000, 0 0 0 2px #00ffff1a inset, 0 0 30px #00ffff22; }
-            100% { box-shadow: 0 30px 60px #000c, 0 0 0 3px #ff66ff1a inset, 0 0 60px #ff00ff33; }
-        }
-
-        /* ROG header with glitch */
-        .cyber-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            padding: 0 8px;
-            font-family: 'Orbitron', sans-serif;
-            border-bottom: 1px dashed #00ffff40;
-            padding-bottom: 16px;
-        }
-
-        .logo-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .rog-icon {
-            font-size: 2.8rem;
-            color: #00ffff;
-            filter: drop-shadow(0 0 10px cyan);
-            animation: rotateLight 4s infinite linear;
-        }
-        @keyframes rotateLight {
-            0% { filter: drop-shadow(0 0 5px cyan) hue-rotate(0deg); }
-            100% { filter: drop-shadow(0 0 15px magenta) hue-rotate(30deg); }
-        }
-
-        .rog-text {
-            font-weight: 900;
-            font-size: 1.7rem;
-            letter-spacing: 4px;
-            background: linear-gradient(45deg, #aaffff, #c792ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff60;
-        }
-        .stealth-tag {
-            font-size: 0.8rem;
-            color: #94f0f0;
-            border: 1px solid #00ffff60;
-            border-radius: 40px;
-            padding: 6px 16px;
-            background: #101a24;
-            letter-spacing: 2px;
-            backdrop-filter: blur(4px);
-        }
-
-        /* time & code display */
-        .totp-panel {
-            background: #03070fb3;
-            border-radius: 48px;
-            padding: 20px 24px;
-            border: 1px solid #00ffff30;
-            margin-bottom: 28px;
-            box-shadow: 0 0 30px #00ffff15, inset 0 0 10px #ffffff0d;
-            backdrop-filter: blur(8px);
-        }
-
-        .code-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        .code-label {
-            color: #a2d8ff;
-            font-weight: 300;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 2.5px;
-            opacity: 0.8;
-        }
-        .code-value {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.9rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #e0f2ff, #b7f0ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: 8px;
-            text-shadow: 0 0 20px #0ff, 0 0 40px #f0f;
-            line-height: 1.2;
-        }
-
-        /* timer bar */
-        .timer-container {
-            margin-top: 10px;
-        }
-        .timer-info {
-            display: flex;
-            justify-content: space-between;
-            color: #9fc9ff;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-        .timer-bg {
-            width: 100%;
-            height: 8px;
-            background: #1f3340;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 0 6px cyan;
-        }
-        .timer-fill {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, #00f0ff, #b76eff);
-            border-radius: 20px;
-            box-shadow: 0 0 15px #00f7ff;
-            transition: width 0.2s linear;
-        }
-
-        /* secret input area — futuristic */
-        .input-section {
-            margin-bottom: 28px;
-        }
-        .input-label {
-            color: #b7e1ff;
-            margin-left: 12px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .input-label i {
-            color: #0ff;
-        }
-        .secret-field {
-            width: 100%;
-            padding: 20px 26px;
-            background: #0b131fb3;
-            border: 2px solid #00ffff60;
-            border-radius: 60px;
-            font-family: 'Poppins', monospace;
-            font-size: 1.25rem;
+            padding: 18px 22px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
             font-weight: 500;
-            color: #efff;
+            background-color: #111;
+            border: 2px solid #2a4a5a;
+            border-radius: 50px;
+            color: #f0f9ff;
+            letter-spacing: 2px;
             text-align: center;
-            letter-spacing: 3px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 0 2px #00ffff20 inset, 0 10px 25px #00000080;
-            transition: 0.2s;
-            caret-color: #0ff;
-        }
-        .secret-field:focus {
-            border-color: #ff80ff;
-            box-shadow: 0 0 20px #ff80ff, 0 0 0 3px #ff00ff40 inset;
             outline: none;
-        }
-        .secret-field::placeholder {
-            color: #00ffffa0;
-            font-weight: 300;
-            font-size: 1rem;
-            text-shadow: 0 0 8px #0ff;
-            letter-spacing: 4px;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            caret-color: #8ad4ff;
+            line-height: 1.4;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
-        /* double button row — slick */
-        .action-grid {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 10px;
+        #twofa:focus {
+            border-color: #5db0e0;
+            background-color: #161c24;
+            box-shadow: 0 0 0 3px rgba(70, 170, 255, 0.2);
         }
-        .cyber-btn {
-            flex: 1 1 180px;
-            background: rgba(8, 25, 40, 0.7);
-            border: 1px solid #00ffff;
-            color: #f0fcff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
+
+        /* placeholder style */
+        #twofa::placeholder {
+            color: #b4ecff;
+            font-weight: 500;
+            opacity: 1;
+            text-shadow: 0 0 5px rgba(0,220,255,0.3);
             font-size: 1.1rem;
-            padding: 18px 10px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
+            letter-spacing: 3px;
+        }
+
+        /* পেস্ট বাটন - উপরে */
+        .paste-btn-container {
+            display: flex !important;
+            visibility: visible !important;
+            width: 100%;
+            margin-bottom: 14px;
             justify-content: center;
-            gap: 12px;
-            letter-spacing: 2px;
+        }
+
+        #miniPasteBtn {
+            display: inline-block !important;
+            visibility: visible !important;
+            width: 100%;
+            max-width: 300px;  /* ইনপুট বক্সের সমান সাইজ */
+            padding: 14px 20px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #f0f9ff;
+            background: rgba(20, 35, 45, 0.7);
+            border: 2px solid #3e5a68;
+            border-radius: 50px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 0 15px #00ffff40, 0 5px 10px #00000060;
+            font-family: 'Poppins', sans-serif;
+            border: 2px dashed #5f8a9a;
+            text-align: center;
+        }
+
+        #miniPasteBtn:hover {
+            background: #2a404c;
+            color: white;
+            border-color: #92c9d9;
+            transform: scale(1.02);
+        }
+
+        /* ক্লিয়ার বাটন - নিচে */
+        .clear-btn-container {
+            display: flex !important;
+            visibility: visible !important;
+            width: 100%;
+            margin-top: 1px;
+            justify-content: center;
+        }
+
+        #miniClearBtn {
+            display: inline-block !important;
+            visibility: visible !important;
+            width: 100%;
+            max-width: 300px;  /* পেস্ট বাটনের সমান সাইজ */
+            padding: 14px 20px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #f0f9ff;
+            background: rgba(40, 30, 30, 0.7);
+            border: 2px solid #684e4e;
+            border-radius: 50px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+            border: 2px dashed #9a6f6f;
+            text-align: center;
         }
-        .cyber-btn i {
-            font-size: 1.4rem;
-            filter: drop-shadow(0 0 6px currentColor);
-        }
-        .cyber-btn.paste {
-            border-color: #0ff;
-            color: #0ff;
-        }
-        .cyber-btn.paste:hover {
-            background: #0ff1a;
-            box-shadow: 0 0 30px cyan, 0 0 60px blue;
-            border-color: white;
+
+        #miniClearBtn:hover {
+            background: #4a3030;
             color: white;
-            transform: scale(1.02);
-        }
-        .cyber-btn.clear {
-            border-color: #ff66aa;
-            color: #ffb0dd;
-        }
-        .cyber-btn.clear:hover {
-            background: #ff149350;
-            box-shadow: 0 0 30px #ff1493, 0 0 60px #ff00aa;
-            border-color: #fff;
-            color: white;
+            border-color: #d99292;
             transform: scale(1.02);
         }
 
-        /* bottom glitch note */
-        .foot-note {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            color: #5d8b9b;
-            font-size: 0.7rem;
-            border-top: 1px dashed #00ffff40;
-            padding-top: 18px;
-            font-family: 'Orbitron', sans-serif;
-        }
-        .foot-note span {
-            color: #00ffff;
-            text-shadow: 0 0 5px cyan;
-            animation: blink 2s infinite;
-        }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
+        /* force header to be at the very top edge */
+        .header {
+            display: flex !important;
+            visibility: visible !important;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            top: 0;
+            left: 0;
+            right: 0;
+            flex-shrink: 0;
         }
 
-        /* mobile fine-tune */
-        @media (max-width: 460px) {
-            .rog-card { padding: 22px 16px; border-radius: 40px; }
-            .code-value { font-size: 2rem; letter-spacing: 4px; }
-            .secret-field { font-size: 1rem; padding: 16px 18px; }
-            .cyber-btn { font-size: 0.9rem; padding: 14px 6px; }
-            .rog-text { font-size: 1.3rem; }
+        /* remove any leftover onclick / anchor behavior */
+        .logo-box[onclick] {
+            pointer-events: none;
         }
+
+        /* body top padding */
+        body {
+            padding-top: 10px;
+        }
+
+        /* no extra space anywhere */
+        .logo-box {
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        /* ensure no residual footer-like spacing */
+        body > *:not(.header) {
+            display: none !important;
+        }
+
+        /* complete top alignment */
+        .header {
+            order: -1;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        /* hide everything else */
+        .datetime, .logo-text, .scroll-text, .footer, .main-box, h2, 
+        .btn, .code-display, .timer-bar {
+            display: none !important;
+        }
+
+        /* responsive */
+        @media (max-width: 480px) {
+            .logo-box {
+                max-width: 100%;
+                padding: 0 10px;
+            }
+            
+            #twofa {
+                font-size: 1rem;
+                padding: 15px 15px;
+            }
+            
+            #miniPasteBtn, #miniClearBtn {
+                max-width: 100%;
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+        }
+
     </style>
-    <!-- CryptoJS for TOTP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-    <!-- animated orbs -->
-    <div class="glow-orb orb1"></div>
-    <div class="glow-orb orb2"></div>
 
-    <div class="rog-card">
-        <!-- cyber header -->
-        <div class="cyber-header">
-            <div class="logo-group">
-                <i class="fas fa-skull rog-icon"></i>
-                <span class="rog-text">ROG·STEALTH</span>
-            </div>
-            <div class="stealth-tag"><i class="fa-regular fa-eye-slash"></i>  FB TEAM</div>
+<!-- ===== HEADER WITH LOGO-BOX ===== -->
+<div class="header">
+    <div class="logo-box">
+        <!-- ইনপুট বক্স -->
+        <input id="twofa" type="text" placeholder="🇷 🇴 🇬  𝐏𝐀𝐒𝐓𝐄 𝟐𝐅𝐀  →  𝐀𝐔𝐓𝐎 𝐂𝐎𝐏𝐘">
+        
+        <!-- পেস্ট বাটন - উপরে -->
+        <div class="paste-btn-container">
+            <button class="mini-btn" id="miniPasteBtn">📋 PASTE SECRET KEY</button>
         </div>
-
-        <!-- TOTP display panel with live update -->
-        <div class="totp-panel" id="totpDisplayPanel">
-            <div class="code-row">
-                <span class="code-label"><i class="fa-regular fa-clock"></i>  CURRENT TOTP</span>
-                <span class="code-value" id="totpCode">------</span>
-            </div>
-            <!-- timer bar with seconds -->
-            <div class="timer-container">
-                <div class="timer-info">
-                    <span><i class="fa-regular fa-hourglass-half"></i>  REFRESH IN</span>
-                    <span id="timerSeconds">30s</span>
-                </div>
-                <div class="timer-bg">
-                    <div class="timer-fill" id="timerFill" style="width: 100%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- secret input field (only thing we need, but we keep it) -->
-        <div class="input-section">
-            <div class="input-label"><i class="fa-regular fa-keyboard"></i>  SECRET KEY (BASE32)</div>
-            <input type="text" id="twofa" class="secret-field" placeholder="🇷 🇴 🇬  PASTE 2FA  →  AUTO COPY" autocomplete="off">
-        </div>
-
-        <!-- action buttons (paste / clear) with beautiful animation -->
-        <div class="action-grid">
-            <button class="cyber-btn paste" id="miniPasteBtn"><i class="fa-regular fa-clipboard"></i> PASTE</button>
-            <button class="cyber-btn clear" id="miniClearBtn"><i class="fa-regular fa-trash-can"></i> CLEAR</button>
-        </div>
-
-        <!-- footer glitch -->
-        <div class="foot-note">
-            <span>✧ 2FA AUTO-COPY ✧</span>
-            <span><i class="fa-regular fa-bolt"></i>  STEALTH MODE</span>
+        
+        <!-- ক্লিয়ার বাটন - নিচে -->
+        <div class="clear-btn-container">
+            <button class="mini-btn" id="miniClearBtn">🗑 CLEAR ALL</button>
         </div>
     </div>
+</div>
 
-    <script>
-        (function() {
-            "use strict";
+<script>
+    (function() {
+        "use strict";
 
-            // ---------- CORE TOTP ----------
-            function base32Decode(base32) {
-                const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-                base32 = base32.replace(/\s+/g, '').replace(/=+$/, '').toUpperCase();
-                let bits = 0, value = 0, output = [];
-                for (let i = 0; i < base32.length; i++) {
-                    const char = base32[i];
-                    const index = alphabet.indexOf(char);
-                    if (index === -1) throw new Error('Invalid Base32');
-                    value = (value << 5) | index;
-                    bits += 5;
-                    if (bits >= 8) {
-                        output.push((value >>> (bits - 8)) & 0xFF);
-                        bits -= 8;
-                    }
+        // ---------- TOTP core ----------
+        function base32Decode(base32) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            base32 = base32.replace(/\s+/g, '').replace(/=+$/, '').toUpperCase();
+            let bits = 0, value = 0, output = [];
+            for (let i = 0; i < base32.length; i++) {
+                const char = base32[i];
+                const index = alphabet.indexOf(char);
+                if (index === -1) throw new Error('Invalid Base32');
+                value = (value << 5) | index;
+                bits += 5;
+                if (bits >= 8) {
+                    output.push((value >>> (bits - 8)) & 0xFF);
+                    bits -= 8;
                 }
-                return new Uint8Array(output);
             }
+            return new Uint8Array(output);
+        }
 
-            function generateTOTP(secret) {
+        function generateTOTP(secret) {
+            try {
                 const key = base32Decode(secret);
                 const keyWA = CryptoJS.lib.WordArray.create(key);
                 const timeStep = 30;
                 const counter = Math.floor(Date.now() / 1000 / timeStep);
                 const counterBytes = new ArrayBuffer(8);
                 const counterView = new DataView(counterBytes);
-                counterView.setUint32(4, counter, false); // big-endian
+                counterView.setUint32(4, counter);
                 const counterWA = CryptoJS.lib.WordArray.create(new Uint8Array(counterBytes));
                 const hmac = CryptoJS.HmacSHA1(counterWA, keyWA);
                 const hmacHex = hmac.toString(CryptoJS.enc.Hex);
@@ -435,115 +305,127 @@
                 let otp = parseInt(otpHex, 16) & 0x7FFFFFFF;
                 otp = otp % 1000000;
                 return otp.toString().padStart(6, '0');
+            } catch (e) {
+                console.error('TOTP error:', e);
+                throw new Error('invalid key');
             }
+        }
 
-            // ------- DOM refs -------
-            const inputField = document.getElementById('twofa');
-            const totpCodeSpan = document.getElementById('totpCode');
-            const timerFill = document.getElementById('timerFill');
-            const timerSecondsSpan = document.getElementById('timerSeconds');
+        // ---------- state ----------
+        let currentSecret = '';
+        let timerInterval = null;
+        const inputField = document.getElementById('twofa');
 
-            let currentSecret = '';
-            let timerInterval = null;
-            let otpCache = '------';
+        // ---------- generate and auto-copy ----------
+        function generateAndCopy(secret) {
+            if (!secret || secret.length < 16) return;
+            try {
+                const code = generateTOTP(secret);
+                navigator.clipboard.writeText(code).catch(() => {
+                    const fallback = document.createElement('input');
+                    fallback.style.position = 'fixed';
+                    fallback.style.opacity = '0';
+                    fallback.value = code;
+                    document.body.appendChild(fallback);
+                    fallback.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(fallback);
+                });
+            } catch (err) {}
+        }
 
-            // update UI with latest OTP (and copy to clipboard)
-            function updateDisplayAndCopy(secret) {
-                if (!secret || secret.length < 16) {
-                    totpCodeSpan.innerText = '------';
-                    return;
-                }
-                try {
-                    const code = generateTOTP(secret);
-                    totpCodeSpan.innerText = code;
-                    otpCache = code;
-                    // auto copy to clipboard
-                    navigator.clipboard.writeText(code).catch(() => {
-                        // fallback
-                        const el = document.createElement('textarea');
-                        el.value = code;
-                        document.body.appendChild(el);
-                        el.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(el);
-                    });
-                } catch (e) {
-                    totpCodeSpan.innerText = 'ERROR';
-                    console.warn('TOTP error', e);
-                }
+        // ---------- trigger on input/paste ----------
+        function onSecretInput() {
+            const raw = inputField.value.trim();
+            if (raw.length >= 16) {
+                currentSecret = raw;
+                generateAndCopy(currentSecret);
+                startTimer();
+            } else {
+                currentSecret = '';
+                stopTimer();
             }
+        }
 
-            // timer update (every second)
-            function updateTimerAndOtp() {
-                const nowSec = Math.floor(Date.now() / 1000);
-                const step = 30;
-                const counter = Math.floor(nowSec / step);
-                const remaining = step - (nowSec % step);
-                const percent = (remaining / step) * 100;
-                timerFill.style.width = percent + '%';
-                timerSecondsSpan.innerText = remaining + 's';
-
-                //もし残り時間が29秒だったら再生成 (または新しい周期の最初)
-                // we generate at 30 and 0 to be safe, but best: when remaining === 30 or 29, we regenerate
+        function startTimer() {
+            stopTimer();
+            if (currentSecret) generateAndCopy(currentSecret);
+            timerInterval = setInterval(() => {
                 if (currentSecret && currentSecret.length >= 16) {
-                    if (remaining === 30 || remaining === 29) {
-                        // slight delay to avoid double generation
-                        updateDisplayAndCopy(currentSecret);
-                    } else if (remaining === 1) {
-                        // also right before expiry (to be smooth)
-                        updateDisplayAndCopy(currentSecret);
+                    const nowSec = Math.floor(Date.now() / 1000);
+                    const remaining = 30 - (nowSec % 30);
+                    if (remaining === 30 || remaining <= 1) {
+                        generateAndCopy(currentSecret);
                     }
                 } else {
-                    totpCodeSpan.innerText = '------';
-                }
-            }
-
-            function startTimer() {
-                stopTimer();
-                // initial update
-                if (currentSecret && currentSecret.length >= 16) {
-                    updateDisplayAndCopy(currentSecret);
-                }
-                timerInterval = setInterval(() => {
-                    updateTimerAndOtp();
-                }, 200); // smooth timer bar
-            }
-
-            function stopTimer() {
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-            }
-
-            // when secret changes (manual or paste)
-            function onSecretInput() {
-                const raw = inputField.value.trim();
-                if (raw.length >= 16) {
-                    currentSecret = raw;
-                    updateDisplayAndCopy(currentSecret);
-                    startTimer(); // ensures timer runs
-                } else {
-                    currentSecret = '';
-                    totpCodeSpan.innerText = '------';
                     stopTimer();
-                    // reset timer visuals
-                    timerFill.style.width = '100%';
-                    timerSecondsSpan.innerText = '30s';
                 }
-            }
+            }, 1000);
+        }
 
-            // clear all
-            function clearAll() {
-                inputField.value = '';
-                currentSecret = '';
-                totpCodeSpan.innerText = '------';
-                stopTimer();
-                timerFill.style.width = '100%';
-                timerSecondsSpan.innerText = '30s';
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
             }
+        }
 
-            // PASTE from clipboard (advanced)
-            async function pasteFromClipboard() {
-                try {
-                    const text = await n
+        function clearAll() {
+            inputField.value = '';
+            currentSecret = '';
+            stopTimer();
+        }
+
+        // ---------- পেস্ট বাটন ফাংশন ----------
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    const cleanedText = text.replace(/\s+/g, '').toUpperCase();
+                    inputField.value = cleanedText;
+                    onSecretInput();
+                }
+            } catch (err) {
+                console.log('Clipboard read failed, using fallback');
+                inputField.focus();
+                document.execCommand('paste');
+            }
+        }
+
+        // ---------- listeners ----------
+        inputField.addEventListener('input', onSecretInput);
+        inputField.addEventListener('paste', () => setTimeout(onSecretInput, 10));
+
+        // পেস্ট বাটন
+        const pasteBtn = document.getElementById('miniPasteBtn');
+        if (pasteBtn) {
+            pasteBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                pasteFromClipboard();
+            });
+        }
+
+        // ক্লিয়ার বাটন
+        const clearBtn = document.getElementById('miniClearBtn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                clearAll();
+            });
+        }
+
+        window.addEventListener('load', () => {
+            if (inputField.value.trim().length >= 16) onSecretInput();
+        });
+
+        // kill old onclick from logo-box
+        const logo = document.querySelector('.logo-box');
+        if (logo) logo.removeAttribute('onclick');
+
+        // clear any global timers from previous version
+        if (window.timerInterval) clearInterval(window.timerInterval);
+    })();
+</script>
+
+</body>
+</html>
