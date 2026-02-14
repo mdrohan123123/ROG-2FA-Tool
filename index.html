@@ -1,431 +1,680 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ROG FB TEAM· stealth</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="🇷 🇴 🇬 2FA Generator - Professional Authentication Tool">
+    <meta name="keywords" content="2FA, OTP, Authenticator, Security, 🇷 🇴 🇬">
+    <meta name="author" content="🇷 🇴 🇬">
+    <title>🔐 🇷 🇴 🇬 2FA Generator</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* ---------- TOTAL MINIMAL: ONLY INPUT AT VERY TOP, NO EXTRA SPACE ---------- */
+        /* CSS Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1E40AF;
+            --primary-light: #3B82F6;
+            --secondary: #10B981;
+            --accent: #8B5CF6;
+            --dark: #0F172A;
+            --darker: #0A0F1C;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --gray-light: #E2E8F0;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 35px 60px -15px rgba(0, 0, 0, 0.7);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            background-color: #0c0f1a;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1E293B 100%);
+            min-height: 100vh;
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 10px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            opacity: 1;
         }
 
-        /* ---------- EVERYTHING HIDDEN EXCEPT LOGO-BOX ---------- */
-        .header, .main-box, .footer, .datetime, .btn, .code-display, .timer-bar,
-        .scroll-text, h2, button:not(#miniClearBtn):not(#miniPasteBtn), .footer div, .logo-text,
-        br, hr, [class*="Appear"], [class*="pulse"], .btn.red, .btn, .main-box * {
-            display: none !important;
-        }
-
-        /* ---------- THE ONLY VISIBLE CONTAINER: LOGO-BOX ---------- */
-        .logo-box {
-            display: flex !important;
-            visibility: visible !important;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 500px;  /* একটু বড় করলাম */
-            margin: 0 auto;
-            padding: 0 15px;
-            background: transparent !important;
-            box-shadow: none !important;
-            border: none !important;
-            transform: none !important;
-            animation: none !important;
-            position: relative;
-            top: 0;
-            left: 0;
-            right: 0;
-        }
-
-        /* input field */
-        #twofa {
-            display: block !important;
-            visibility: visible !important;
-            width: 100%;
-            padding: 18px 22px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 500;
-            background-color: #111;
-            border: 2px solid #2a4a5a;
-            border-radius: 50px;
-            color: #f0f9ff;
-            letter-spacing: 2px;
-            text-align: center;
-            outline: none;
-            transition: 0.2s;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            caret-color: #8ad4ff;
-            line-height: 1.4;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        #twofa:focus {
-            border-color: #5db0e0;
-            background-color: #161c24;
-            box-shadow: 0 0 0 3px rgba(70, 170, 255, 0.2);
-        }
-
-        /* placeholder style */
-        #twofa::placeholder {
-            color: #b4ecff;
-            font-weight: 500;
-            opacity: 1;
-            text-shadow: 0 0 5px rgba(0,220,255,0.3);
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-        }
-
-        /* পেস্ট বাটন - উপরে */
-        .paste-btn-container {
-            display: flex !important;
-            visibility: visible !important;
-            width: 100%;
-            margin-bottom: 14px;
-            justify-content: center;
-        }
-
-        #miniPasteBtn {
-            display: inline-block !important;
-            visibility: visible !important;
-            width: 100%;
-            max-width: 300px;  /* ইনপুট বক্সের সমান সাইজ */
-            padding: 14px 20px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #f0f9ff;
-            background: rgba(20, 35, 45, 0.7);
-            border: 2px solid #3e5a68;
-            border-radius: 50px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            backdrop-filter: blur(4px);
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
-            border: 2px dashed #5f8a9a;
-            text-align: center;
-        }
-
-        #miniPasteBtn:hover {
-            background: #2a404c;
-            color: white;
-            border-color: #92c9d9;
-            transform: scale(1.02);
-        }
-
-        /* ক্লিয়ার বাটন - নিচে */
-        .clear-btn-container {
-            display: flex !important;
-            visibility: visible !important;
-            width: 100%;
-            margin-top: 1px;
-            justify-content: center;
-        }
-
-        #miniClearBtn {
-            display: inline-block !important;
-            visibility: visible !important;
-            width: 100%;
-            max-width: 300px;  /* পেস্ট বাটনের সমান সাইজ */
-            padding: 14px 20px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #f0f9ff;
-            background: rgba(40, 30, 30, 0.7);
-            border: 2px solid #684e4e;
-            border-radius: 50px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            backdrop-filter: blur(4px);
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
-            border: 2px dashed #9a6f6f;
-            text-align: center;
-        }
-
-        #miniClearBtn:hover {
-            background: #4a3030;
-            color: white;
-            border-color: #d99292;
-            transform: scale(1.02);
-        }
-
-        /* force header to be at the very top edge */
+        /* Header */
         .header {
-            display: flex !important;
-            visibility: visible !important;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            background: transparent;
-            padding: 0;
-            margin: 0;
+            text-align: center;
+            margin-bottom: 30px;
             position: relative;
+            padding: 30px 15px;
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.1) 0%, 
+                rgba(30, 64, 175, 0.2) 50%, 
+                rgba(15, 23, 42, 0.3) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary), 
+                transparent);
+            animation: headerShine 3s linear infinite;
+        }
+
+        @keyframes headerShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
+            transition: var(--transition);
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 15px 50px rgba(37, 99, 235, 0.6);
+        }
+
+        .logo-container i {
+            font-size: 32px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFFFFF, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            line-height: 1;
+            padding: 0 10px;
+        }
+
+        .brand-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-light);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .brand-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Left Panel - Main Content */
+        .main-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 25px;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-label i {
+            font-size: 1.2rem;
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
             flex-shrink: 0;
         }
 
-        /* remove any leftover onclick / anchor behavior */
-        .logo-box[onclick] {
-            pointer-events: none;
+        .section-label span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light);
+            word-break: break-word;
         }
 
-        /* body top padding */
-        body {
-            padding-top: 10px;
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
         }
 
-        /* no extra space anywhere */
-        .logo-box {
-            margin-top: 0;
-            padding-top: 0;
+        #secretKey {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            font-family: 'Inter', monospace;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--light);
+            transition: var(--transition);
+            min-height: 56px;
         }
 
-        /* ensure no residual footer-like spacing */
-        body > *:not(.header) {
-            display: none !important;
+        #secretKey:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
         }
 
-        /* complete top alignment */
-        .header {
-            order: -1;
-            margin-top: 0;
-            padding-top: 0;
+        #secretKey::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
 
-        /* hide everything else */
-        .datetime, .logo-text, .scroll-text, .footer, .main-box, h2, 
-        .btn, .code-display, .timer-bar {
-            display: none !important;
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+            width: 100%;
         }
 
-        /* responsive */
-        @media (max-width: 480px) {
-            .logo-box {
-                max-width: 100%;
-                padding: 0 10px;
-            }
-            
-            #twofa {
-                font-size: 1rem;
-                padding: 15px 15px;
-            }
-            
-            #miniPasteBtn, #miniClearBtn {
-                max-width: 100%;
-                font-size: 1rem;
-                padding: 12px 15px;
-            }
+        .action-btn {
+            padding: 18px 15px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-height: 56px;
         }
 
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-</head>
-<body>
-
-<!-- ===== HEADER WITH LOGO-BOX ===== -->
-<div class="header">
-    <div class="logo-box">
-        <!-- ইনপুট বক্স -->
-        <input id="twofa" type="text" placeholder="🇷 🇴 🇬  𝐏𝐀𝐒𝐓𝐄 𝟐𝐅𝐀  →  𝐀𝐔𝐓𝐎 𝐂𝐎𝐏𝐘">
-        
-        <!-- পেস্ট বাটন - উপরে -->
-        <div class="paste-btn-container">
-            <button class="mini-btn" id="miniPasteBtn">📋 PASTE SECRET KEY</button>
-        </div>
-        
-        <!-- ক্লিয়ার বাটন - নিচে -->
-        <div class="clear-btn-container">
-            <button class="mini-btn" id="miniClearBtn">🗑 CLEAR ALL</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    (function() {
-        "use strict";
-
-        // ---------- TOTP core ----------
-        function base32Decode(base32) {
-            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-            base32 = base32.replace(/\s+/g, '').replace(/=+$/, '').toUpperCase();
-            let bits = 0, value = 0, output = [];
-            for (let i = 0; i < base32.length; i++) {
-                const char = base32[i];
-                const index = alphabet.indexOf(char);
-                if (index === -1) throw new Error('Invalid Base32');
-                value = (value << 5) | index;
-                bits += 5;
-                if (bits >= 8) {
-                    output.push((value >>> (bits - 8)) & 0xFF);
-                    bits -= 8;
-                }
-            }
-            return new Uint8Array(output);
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.6s;
         }
 
-        function generateTOTP(secret) {
-            try {
-                const key = base32Decode(secret);
-                const keyWA = CryptoJS.lib.WordArray.create(key);
-                const timeStep = 30;
-                const counter = Math.floor(Date.now() / 1000 / timeStep);
-                const counterBytes = new ArrayBuffer(8);
-                const counterView = new DataView(counterBytes);
-                counterView.setUint32(4, counter);
-                const counterWA = CryptoJS.lib.WordArray.create(new Uint8Array(counterBytes));
-                const hmac = CryptoJS.HmacSHA1(counterWA, keyWA);
-                const hmacHex = hmac.toString(CryptoJS.enc.Hex);
-                const offset = parseInt(hmacHex.substr(39, 1), 16) * 2;
-                const otpHex = hmacHex.substr(offset, 8);
-                let otp = parseInt(otpHex, 16) & 0x7FFFFFFF;
-                otp = otp % 1000000;
-                return otp.toString().padStart(6, '0');
-            } catch (e) {
-                console.error('TOTP error:', e);
-                throw new Error('invalid key');
-            }
+        .action-btn:hover::before {
+            left: 100%;
         }
 
-        // ---------- state ----------
-        let currentSecret = '';
-        let timerInterval = null;
-        const inputField = document.getElementById('twofa');
-
-        // ---------- generate and auto-copy ----------
-        function generateAndCopy(secret) {
-            if (!secret || secret.length < 16) return;
-            try {
-                const code = generateTOTP(secret);
-                navigator.clipboard.writeText(code).catch(() => {
-                    const fallback = document.createElement('input');
-                    fallback.style.position = 'fixed';
-                    fallback.style.opacity = '0';
-                    fallback.value = code;
-                    document.body.appendChild(fallback);
-                    fallback.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(fallback);
-                });
-            } catch (err) {}
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
-        // ---------- trigger on input/paste ----------
-        function onSecretInput() {
-            const raw = inputField.value.trim();
-            if (raw.length >= 16) {
-                currentSecret = raw;
-                generateAndCopy(currentSecret);
-                startTimer();
-            } else {
-                currentSecret = '';
-                stopTimer();
-            }
+        .paste-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
         }
 
-        function startTimer() {
-            stopTimer();
-            if (currentSecret) generateAndCopy(currentSecret);
-            timerInterval = setInterval(() => {
-                if (currentSecret && currentSecret.length >= 16) {
-                    const nowSec = Math.floor(Date.now() / 1000);
-                    const remaining = 30 - (nowSec % 30);
-                    if (remaining === 30 || remaining <= 1) {
-                        generateAndCopy(currentSecret);
-                    }
-                } else {
-                    stopTimer();
-                }
-            }, 1000);
+        .generate-btn {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
         }
 
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
+        .copy-btn {
+            background: linear-gradient(135deg, var(--accent), #7C3AED);
+            color: white;
         }
 
-        function clearAll() {
-            inputField.value = '';
-            currentSecret = '';
-            stopTimer();
+        .btn-icon {
+            font-size: 1.2rem;
         }
 
-        // ---------- পেস্ট বাটন ফাংশন ----------
-        async function pasteFromClipboard() {
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    const cleanedText = text.replace(/\s+/g, '').toUpperCase();
-                    inputField.value = cleanedText;
-                    onSecretInput();
-                }
-            } catch (err) {
-                console.log('Clipboard read failed, using fallback');
-                inputField.focus();
-                document.execCommand('paste');
-            }
+        /* Code Display */
+        .code-display-container {
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.1) 0%, 
+                rgba(15, 23, 42, 0.2) 100%);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
         }
 
-        // ---------- listeners ----------
-        inputField.addEventListener('input', onSecretInput);
-        inputField.addEventListener('paste', () => setTimeout(onSecretInput, 10));
-
-        // পেস্ট বাটন
-        const pasteBtn = document.getElementById('miniPasteBtn');
-        if (pasteBtn) {
-            pasteBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                pasteFromClipboard();
-            });
+        .code-display-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary));
         }
 
-        // ক্লিয়ার বাটন
-        const clearBtn = document.getElementById('miniClearBtn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                clearAll();
-            });
+        .code-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px;
         }
 
-        window.addEventListener('load', () => {
-            if (inputField.value.trim().length >= 16) onSecretInput();
-        });
+        .code-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light);
+            text-align: center;
+        }
 
-        // kill old onclick from logo-box
-        const logo = document.querySelector('.logo-box');
-        if (logo) logo.removeAttribute('onclick');
+        .code-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 50px;
+        }
 
-        // clear any global timers from previous version
-        if (window.timerInterval) clearInterval(window.timerInterval);
-    })();
-</script>
+        #timeLeft {
+            font-family: 'Poppins', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
 
-</body>
-</html>
+        .code-display {
+            text-align: center;
+            padding: 25px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .code-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: codeShine 3s infinite;
+        }
+
+        @keyframes codeShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #generatedCode {
+            font-family: 'Poppins', monospace;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--light);
+            letter-spacing: 8px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+            word-break: break-all;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        #progressFill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 100%;
+            transition: width 1s linear;
+            position: relative;
+        }
+
+        #progressFill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s infinite linear;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Right Panel - Features */
+        .features-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+        }
+
+        .features-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--light);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .features-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 10px;
+        }
+
+        .feature-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Security Banner */
+        .security-banner {
+            background: linear-gradient(135deg, 
+                rgba(239, 68, 68, 0.1) 0%, 
+                rgba(239, 68, 68, 0.2) 100%);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--error), 
+                transparent);
+        }
+
+        .security-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .security-icon {
+            font-size: 2.5rem;
+            color: var(--error);
+            flex-shrink: 0;
+        }
+
+        .security-text h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .security-text p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.8) 0%, 
+                rgba(30, 41, 59, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 30px 20px;
+            margin-top: 30px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary));
+        }
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-backgroun
