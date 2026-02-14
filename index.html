@@ -15,6 +15,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- ✅ শুধু লোডিং ফিক্স - CryptoJS প্রিলোড ও ফলব্যাক -->
+    <script>
+        (function() {
+            // CryptoJS লোড ফাংশন - মাল্টিপল CDN
+            function loadCryptoJS() {
+                // প্রথম CDN
+                var script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js';
+                
+                script.onerror = function() {
+                    // প্রথম CDN ফেল হলে দ্বিতীয় CDN
+                    var backupScript = document.createElement('script');
+                    backupScript.src = 'https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js';
+                    document.head.appendChild(backupScript);
+                };
+                
+                document.head.appendChild(script);
+            }
+            
+            // এখনই লোড করা শুরু করুন
+            loadCryptoJS();
+        })();
+    </script>
     
     <style>
         /* CSS Reset & Base Styles */
@@ -646,34 +669,4 @@
         .footer {
             background: linear-gradient(135deg, 
                 rgba(15, 23, 42, 0.8) 0%, 
-                rgba(30, 41, 59, 0.8) 100%);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            padding: 30px 20px;
-            margin-top: 30px;
-            border: 1px solid var(--glass-border);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                var(--primary), 
-                var(--accent), 
-                var(--secondary));
-        }
-
-        .footer-logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-backgroun
+       
