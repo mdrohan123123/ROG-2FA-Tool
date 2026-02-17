@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>R O G | 2FA অথেন্টিকেটর</title>
+    <title>R O G | 2FA Authenticator</title>
     <meta name="theme-color" content="#0b0d17">
 
     <!-- OTP Auth Library -->
@@ -354,6 +354,39 @@
             gap: 5px;
         }
 
+        /* Ad Sections */
+        .ad-container {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .ad-space {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed var(--primary);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .ad-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .ad-content {
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+        }
+
         /* Admin Panel Modal */
         .admin-overlay {
             position: fixed;
@@ -618,7 +651,8 @@
             justify-content: center;
             text-align: center;
             padding: 2rem;
-            cursor: pointer; /* ক্লিকযোগ্য করার জন্য */
+            cursor: pointer;
+            pointer-events: auto;
         }
 
         .delete-all-btn {
@@ -644,27 +678,27 @@
 </head>
 <body>
 
-    <!-- Status Overlays - এখন ক্লিকযোগ্য এবং ট্যাপ কাউন্টার সহ -->
-    <div id="maintenance-overlay" class="overlay" onclick="handleOverlayClick()">
-        <h1 style="color: var(--warning);">🔧 সিস্টেম আপডেট</h1>
-        <p id="maintenance-text">নেটওয়ার্ক ইনফ্রাস্ট্রাকচার আপগ্রেড করা হচ্ছে। কিছুক্ষণ পর আবার চেষ্টা করুন।</p>
-        <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">অ্যাডমিন প্যানেল খুলতে ৫ বার ট্যাপ করুন</p>
+    <!-- Status Overlays -->
+    <div id="maintenance-overlay" class="overlay" onclick="handleOverlayClick(event)">
+        <h1 style="color: var(--warning);">🔧 System Update</h1>
+        <p id="maintenance-text">Network infrastructure is being upgraded. Please try again in a moment.</p>
+        <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">Tap 5 times to open admin panel</p>
     </div>
 
-    <div id="block-overlay" class="overlay" onclick="handleOverlayClick()">
-        <h1 style="color: var(--danger);">⛔ অ্যাক্সেস অস্বীকৃত</h1>
-        <p>প্ল্যাটফর্মটি হাই-সিকিউরিটি লকডাউন মোডে আছে। সব পাবলিক ট্রানজেকশন স্থগিত করা হয়েছে।</p>
-        <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">অ্যাডমিন প্যানেল খুলতে ৫ বার ট্যাপ করুন</p>
+    <div id="block-overlay" class="overlay" onclick="handleOverlayClick(event)">
+        <h1 style="color: var(--danger);">⛔ Access Denied</h1>
+        <p>The platform is in high-security lockdown mode. All public transactions have been suspended.</p>
+        <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">Tap 5 times to open admin panel</p>
     </div>
 
     <!-- Password Prompt Modal -->
     <div class="password-prompt" id="passwordPrompt">
         <div class="password-modal">
-            <h3><i class="fa-solid fa-lock"></i> অ্যাডমিন প্যানেল</h3>
-            <input type="password" id="admin-password" placeholder="পাসওয়ার্ড দিন" autocomplete="off">
-            <button class="btn" onclick="checkPassword()">প্রবেশ করুন</button>
-            <button class="btn btn-secondary" onclick="closePasswordPrompt()">বাতিল</button>
-            <div class="error-message" id="password-error">ভুল পাসওয়ার্ড!</div>
+            <h3><i class="fa-solid fa-lock"></i> Admin Panel</h3>
+            <input type="password" id="admin-password" placeholder="Enter password" autocomplete="off">
+            <button class="btn" onclick="checkPassword()">Login</button>
+            <button class="btn btn-secondary" onclick="closePasswordPrompt()">Cancel</button>
+            <div class="error-message" id="password-error">Wrong password!</div>
         </div>
     </div>
 
@@ -673,99 +707,145 @@
         <div class="admin-modal">
             <button class="admin-close" onclick="closeAdminPanel()"><i class="fa-solid fa-times"></i></button>
             
-            <h2><i class="fa-solid fa-lock"></i> অ্যাডমিন কন্ট্রোল প্যানেল</h2>
+            <h2><i class="fa-solid fa-lock"></i> Admin Control Panel</h2>
 
-            <!-- থিম কাস্টমাইজার সেকশন -->
+            <!-- Theme Customizer Section -->
             <div class="admin-section">
-                <h3><i class="fa-solid fa-palette"></i> থিম কাস্টমাইজার</h3>
+                <h3><i class="fa-solid fa-palette"></i> Theme Customizer</h3>
                 <div class="theme-picker">
-                    <div class="color-dot" style="background: #38bdf8;" onclick="setTheme('#38bdf8', '#818cf8')" title="আকাশি নীল"></div>
-                    <div class="color-dot" style="background: #fbbf24;" onclick="setTheme('#fbbf24', '#f59e0b')" title="হলুদ"></div>
-                    <div class="color-dot" style="background: #34d399;" onclick="setTheme('#34d399', '#10b981')" title="সবুজ"></div>
-                    <div class="color-dot" style="background: #f87171;" onclick="setTheme('#f87171', '#ef4444')" title="লাল"></div>
-                    <div class="color-dot" style="background: #c084fc;" onclick="setTheme('#c084fc', '#a78bfa')" title="পার্পল"></div>
-                    <div class="color-dot" style="background: #f472b6;" onclick="setTheme('#f472b6', '#ec4899')" title="পিঙ্ক"></div>
+                    <div class="color-dot" style="background: #38bdf8;" onclick="setTheme('#38bdf8', '#818cf8')" title="Sky Blue"></div>
+                    <div class="color-dot" style="background: #fbbf24;" onclick="setTheme('#fbbf24', '#f59e0b')" title="Yellow"></div>
+                    <div class="color-dot" style="background: #34d399;" onclick="setTheme('#34d399', '#10b981')" title="Green"></div>
+                    <div class="color-dot" style="background: #f87171;" onclick="setTheme('#f87171', '#ef4444')" title="Red"></div>
+                    <div class="color-dot" style="background: #c084fc;" onclick="setTheme('#c084fc', '#a78bfa')" title="Purple"></div>
+                    <div class="color-dot" style="background: #f472b6;" onclick="setTheme('#f472b6', '#ec4899')" title="Pink"></div>
                 </div>
                 <div class="admin-item">
-                    <label>কাস্টম প্রাইমারি কালার</label>
+                    <label>Custom Primary Color</label>
                     <div style="display: flex; gap: 0.5rem;">
                         <input type="color" id="customPrimary" value="#38bdf8" style="width: 60px; height: 50px; padding: 0;">
-                        <button class="btn btn-secondary" onclick="applyCustomColor()" style="padding: 0.5rem 1rem;">প্রয়োগ</button>
+                        <button class="btn btn-secondary" onclick="applyCustomColor()" style="padding: 0.5rem 1rem;">Apply</button>
                     </div>
                 </div>
             </div>
 
             <div class="admin-section">
-                <h3><i class="fa-solid fa-shield"></i> সিকিউরিটি সেটিংস</h3>
+                <h3><i class="fa-solid fa-shield"></i> Security Settings</h3>
                 
                 <div class="admin-item">
-                    <label>ডিফল্ট সিক্রেট কী</label>
-                    <input type="text" id="admin-default-secret" placeholder="BASE32-SECRET-KEY" value="JBSWY3DPEHPK3PXP">
+                    <label>Default Secret Key</label>
+                    <input type="text" id="admin-default-secret" placeholder="BASE32-SECRET-KEY" value="">
                 </div>
 
                 <div class="admin-item">
-                    <label>OTP টাইমার (সেকেন্ড)</label>
+                    <label>OTP Timer (seconds)</label>
                     <select id="admin-otp-timer">
-                        <option value="30">৩০ সেকেন্ড (ডিফল্ট)</option>
-                        <option value="60">৬০ সেকেন্ড</option>
+                        <option value="30">30 seconds (default)</option>
+                        <option value="60">60 seconds</option>
                     </select>
                 </div>
             </div>
 
             <div class="admin-section">
-                <h3><i class="fa-solid fa-globe"></i> সাইট কন্ট্রোল</h3>
+                <h3><i class="fa-solid fa-globe"></i> Site Control</h3>
                 
                 <div class="admin-grid">
                     <div class="admin-item">
-                        <label>সাইট স্ট্যাটাস</label>
+                        <label>Site Status</label>
                         <select id="admin-site-status">
-                            <option value="active">✅ অ্যাক্টিভ</option>
-                            <option value="maintenance">🔧 রক্ষণাবেক্ষণ</option>
-                            <option value="blocked">⛔ ব্লকড</option>
+                            <option value="active">✅ Active</option>
+                            <option value="maintenance">🔧 Maintenance</option>
+                            <option value="blocked">⛔ Blocked</option>
                         </select>
                     </div>
 
                     <div class="admin-item">
-                        <label>ব্র্যান্ড নাম</label>
+                        <label>Brand Name</label>
                         <input type="text" id="admin-brand" value="ROG HUB">
                     </div>
                 </div>
 
                 <div class="admin-item">
-                    <label>নোটিশ মেসেজ</label>
-                    <input type="text" id="admin-notice" placeholder="মেইনটেন্যান্স মেসেজ">
+                    <label>Notice Message</label>
+                    <input type="text" id="admin-notice" placeholder="Maintenance message">
                 </div>
             </div>
 
             <div class="admin-section">
                 <h3>
                     <i class="fa-solid fa-newspaper"></i> 
-                    নিউজ ম্যানেজমেন্ট
+                    News Management
                     <span class="delete-all-btn" onclick="deleteAllNews()">
-                        <i class="fa-solid fa-trash-can"></i> সব ডিলিট
+                        <i class="fa-solid fa-trash-can"></i> Delete All
                     </span>
                 </h3>
                 
                 <div class="admin-item">
-                    <label>টাইটেল</label>
-                    <input type="text" id="admin-news-title" placeholder="আপডেট টাইটেল">
+                    <label>Title</label>
+                    <input type="text" id="admin-news-title" placeholder="Update title">
                 </div>
 
                 <div class="admin-item">
-                    <label>বিবরণ</label>
-                    <textarea id="admin-news-body" rows="3" placeholder="আপডেটের বিস্তারিত..."></textarea>
+                    <label>Description</label>
+                    <textarea id="admin-news-body" rows="3" placeholder="Update details..."></textarea>
                 </div>
 
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="btn" onclick="addNewsItem()" style="flex: 2;">➕ নিউজ যোগ করুন</button>
-                    <button class="btn btn-secondary" onclick="clearNewsInputs()" style="flex: 1;">🗑️ ক্লিয়ার</button>
+                    <button class="btn" onclick="addNewsItem()" style="flex: 2;">➕ Add News</button>
+                    <button class="btn btn-secondary" onclick="clearNewsInputs()" style="flex: 1;">🗑️ Clear</button>
                 </div>
 
                 <div id="admin-news-list" class="admin-news-list"></div>
             </div>
 
+            <!-- Ad Management Section (10 Ads) -->
+            <div class="admin-section">
+                <h3><i class="fa-solid fa-ad"></i> Ad Management (10 Slots)</h3>
+                
+                <div class="admin-item">
+                    <label>Ad 1 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-1" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 2 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-2" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 3 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-3" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 4 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-4" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 5 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-5" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 6 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-6" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 7 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-7" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 8 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-8" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 9 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-9" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+                <div class="admin-item">
+                    <label>Ad 10 - AdSense Code / HTML</label>
+                    <textarea id="admin-ad-10" rows="2" placeholder="Paste AdSense code or ad HTML here..."></textarea>
+                </div>
+            </div>
+
             <button class="btn" onclick="saveAdminSettings()" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">
-                <i class="fa-solid fa-save"></i> সব সেটিংস সংরক্ষণ করুন
+                <i class="fa-solid fa-save"></i> Save All Settings
             </button>
         </div>
     </div>
@@ -774,19 +854,19 @@
     <nav>
         <div class="brand" id="main-brand">ROG <span style="font-weight: 300; opacity: 0.5;">HUB</span></div>
         <div class="admin-link" onclick="openPasswordPrompt()">
-            <i class="fa-solid fa-lock"></i> অ্যাডমিন
+            <i class="fa-solid fa-lock"></i> Admin
         </div>
     </nav>
 
     <main class="container">
         <!-- 2FA Authenticator Section -->
         <section class="card">
-            <div class="card-title"><i class="fa-solid fa-shield-halved"></i> টু-ফ্যাক্টর অথেন্টিকেটর</div>
+            <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Two-Factor Authenticator</div>
             
             <div class="secret-container">
-                <input type="text" id="secret-input" placeholder="সিক্রেট কী পেস্ট করুন... (BASE32)" autocomplete="off">
+                <input type="text" id="secret-input" placeholder="Paste secret key... (BASE32)" autocomplete="off">
                 <button class="paste-btn" onclick="pasteFromClipboard()">
-                    <i class="fa-solid fa-paste"></i> পেস্ট করুন
+                    <i class="fa-solid fa-paste"></i> Paste
                 </button>
             </div>
             
@@ -795,41 +875,53 @@
                 <div class="timer-bar"><div id="timer-progress" style="width: 100%"></div></div>
                 <div class="timer-text">
                     <i class="fa-regular fa-clock"></i>
-                    <span id="timer-seconds">30</span> সেকেন্ড
+                    <span id="timer-seconds">30</span> seconds
                 </div>
             </div>
             <small style="color:var(--text-dim); display: block; text-align: center; margin-top: 0.5rem;">
-                <i class="fa-regular fa-circle-check"></i> OTP অটোমেটিক কপি হয়ে যাবে
+                <i class="fa-regular fa-circle-check"></i> OTP will be copied automatically
             </small>
         </section>
 
-        <!-- News Feed Section -->
+        <!-- News Feed Section with Ads (10 slots) -->
         <section class="card">
-            <div class="card-title"><i class="fa-solid fa-newspaper"></i> লাইভ নিউজ ফিড</div>
+            <div class="card-title"><i class="fa-solid fa-newspaper"></i> Live News Feed</div>
             <div id="news-feed-container"></div>
+            
+            <!-- Ad containers 1-10 (hidden by default) -->
+            <div class="ad-container" id="ad-container-1" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-1"></div></div></div>
+            <div class="ad-container" id="ad-container-2" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-2"></div></div></div>
+            <div class="ad-container" id="ad-container-3" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-3"></div></div></div>
+            <div class="ad-container" id="ad-container-4" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-4"></div></div></div>
+            <div class="ad-container" id="ad-container-5" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-5"></div></div></div>
+            <div class="ad-container" id="ad-container-6" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-6"></div></div></div>
+            <div class="ad-container" id="ad-container-7" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-7"></div></div></div>
+            <div class="ad-container" id="ad-container-8" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-8"></div></div></div>
+            <div class="ad-container" id="ad-container-9" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-9"></div></div></div>
+            <div class="ad-container" id="ad-container-10" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-10"></div></div></div>
         </section>
     </main>
 
     <!-- Toast Notification -->
-    <div id="toast">কপি হয়েছে!</div>
+    <div id="toast">Copied!</div>
 
     <script>
-        // ট্যাপ কাউন্টার ভেরিয়েবল
+        // Tap counter variables
         let tapCount = 0;
         let tapTimer;
 
-        // ডেটা স্টোরেজ
+        // Data storage
         let newsItems = JSON.parse(localStorage.getItem('rog_news')) || [
-            { id: '1', title: 'সিকিউরিটি আপডেট', body: 'দ্বি-স্তর যাচাইকরণ বাধ্যতামূলক করা হয়েছে।', time: Date.now() - 3600000 },
-            { id: '2', title: 'নতুন ফিচার', body: 'থিম কাস্টমাইজেশন যোগ করা হয়েছে!', time: Date.now() - 7200000 }
+            { id: '1', title: 'Security Update', body: 'Two-factor verification has been made mandatory.', time: Date.now() - 3600000 },
+            { id: '2', title: 'New Feature', body: 'Theme customization has been added!', time: Date.now() - 7200000 }
         ];
 
-        // ওটিপি টাইমার ভেরিয়েবল
+        // OTP timer variables
         let otpInterval;
         let timerSeconds = 30;
         let currentSecret = '';
 
-        // থিম ফাংশন
+        // Theme functions
         function setTheme(primary, secondary) {
             document.documentElement.style.setProperty('--primary', primary);
             document.documentElement.style.setProperty('--secondary', secondary || primary);
@@ -843,31 +935,25 @@
             setTheme(color, color);
         }
 
-        // ওভারলে ক্লিক হ্যান্ডলার (মেইনটেন্স/ব্লক অবস্থায়)
-        function handleOverlayClick() {
+        // Overlay click handler
+        function handleOverlayClick(event) {
+            event.stopPropagation();
+            
             tapCount++;
             
-            // ট্যাপ টাইমার রিসেট
             clearTimeout(tapTimer);
             tapTimer = setTimeout(() => {
                 tapCount = 0;
-            }, 1000); // ১ সেকেন্ডের মধ্যে ৫ বার ট্যাপ করতে হবে
+            }, 1000);
             
-            // ৫ বার ট্যাপ করা হলে
             if (tapCount >= 5) {
                 tapCount = 0;
                 clearTimeout(tapTimer);
-                
-                // স্ট্যাটাস ওভারলে সরিয়ে অ্যাডমিন প্যানেল খুলুন
-                document.getElementById('maintenance-overlay').style.display = 'none';
-                document.getElementById('block-overlay').style.display = 'none';
-                
-                // পাসওয়ার্ড প্রম্পট দেখান
                 openPasswordPrompt();
             }
         }
 
-        // পাসওয়ার্ড ফাংশন
+        // Password functions
         function openPasswordPrompt() {
             document.getElementById('passwordPrompt').style.display = 'flex';
             document.getElementById('admin-password').value = '';
@@ -888,18 +974,18 @@
             }
         }
 
-        // ক্লিপবোর্ড থেকে পেস্ট ফাংশন
+        // Clipboard paste function
         async function pasteFromClipboard() {
             try {
                 const text = await navigator.clipboard.readText();
                 document.getElementById('secret-input').value = text;
                 processSecret(text);
             } catch (err) {
-                showToast('পেস্ট করতে সমস্যা হয়েছে');
+                showToast('Error pasting');
             }
         }
 
-        // সিক্রেট প্রসেস করে ওটিপি জেনারেট
+        // Process secret and generate OTP
         function processSecret(secret) {
             if (!secret || secret.trim() === '') {
                 document.getElementById('otp-value').innerText = '------';
@@ -910,7 +996,7 @@
             generateCorrectOTP();
         }
 
-        // সঠিক OTP জেনারেট
+        // Generate correct OTP
         function generateCorrectOTP() {
             if (!currentSecret) return;
             
@@ -925,7 +1011,7 @@
                 document.getElementById('otp-value').innerText = otp;
                 
                 copyToClipboard(otp);
-                showToast('OTP কপি হয়েছে!');
+                showToast('OTP copied!');
                 
             } catch (e) {
                 console.error('OTP generation error:', e);
@@ -945,11 +1031,11 @@
             const otp = document.getElementById('otp-value').innerText;
             if (otp && otp !== '------') {
                 await copyToClipboard(otp);
-                showToast('OTP কপি হয়েছে!');
+                showToast('OTP copied!');
             }
         }
 
-        // টাইমার স্টার্ট
+        // Start timer
         function startOtpTimer(seconds = 30) {
             if (otpInterval) clearInterval(otpInterval);
             
@@ -981,7 +1067,7 @@
             otpInterval = setInterval(updateTimer, 100);
         }
 
-        // নিউজ ফাংশন
+        // News functions
         function saveNewsToStorage() {
             localStorage.setItem('rog_news', JSON.stringify(newsItems));
         }
@@ -989,7 +1075,7 @@
         function renderNewsFeed() {
             const container = document.getElementById('news-feed-container');
             if (!newsItems.length) {
-                container.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 2rem;">কোন নিউজ নেই</div>';
+                container.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 2rem;">No news</div>';
                 return;
             }
             
@@ -997,7 +1083,7 @@
             
             let html = '';
             sortedNews.forEach(item => {
-                const date = new Date(item.time).toLocaleString('bn-BD', {
+                const date = new Date(item.time).toLocaleString('en-US', {
                     hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit'
                 });
                 
@@ -1017,7 +1103,7 @@
         function renderAdminNews() {
             const listDiv = document.getElementById('admin-news-list');
             if (!newsItems.length) {
-                listDiv.innerHTML = '<div style="color: var(--text-dim); padding: 1rem; text-align: center;">কোন নিউজ নেই</div>';
+                listDiv.innerHTML = '<div style="color: var(--text-dim); padding: 1rem; text-align: center;">No news</div>';
                 return;
             }
             
@@ -1041,16 +1127,16 @@
             saveNewsToStorage();
             renderNewsFeed();
             renderAdminNews();
-            showToast('নিউজ ডিলিট হয়েছে');
+            showToast('News deleted');
         }
 
         function deleteAllNews() {
-            if (confirm('সব নিউজ ডিলিট করার বিষয়ে নিশ্চিত?')) {
+            if (confirm('Are you sure you want to delete all news?')) {
                 newsItems = [];
                 saveNewsToStorage();
                 renderNewsFeed();
                 renderAdminNews();
-                showToast('সব নিউজ ডিলিট হয়েছে');
+                showToast('All news deleted');
             }
         }
 
@@ -1059,7 +1145,7 @@
             const body = document.getElementById('admin-news-body').value.trim();
             
             if (!title || !body) {
-                alert('টাইটেল এবং বিবরণ দিন');
+                alert('Please enter title and description');
                 return;
             }
             
@@ -1075,7 +1161,7 @@
             renderNewsFeed();
             renderAdminNews();
             clearNewsInputs();
-            showToast('নিউজ যোগ হয়েছে');
+            showToast('News added');
         }
 
         function clearNewsInputs() {
@@ -1083,13 +1169,41 @@
             document.getElementById('admin-news-body').value = '';
         }
 
-        // অ্যাডমিন প্যানেল ফাংশন
+        // Ad rendering functions - now 10 ads
+        function renderAds() {
+            for (let i = 1; i <= 10; i++) {
+                const adCode = localStorage.getItem(`rog_ad_${i}`) || '';
+                const container = document.getElementById(`ad-container-${i}`);
+                const contentDiv = document.getElementById(`ad-content-${i}`);
+                
+                if (adCode && adCode.trim() !== '') {
+                    // Show container and set content
+                    container.style.display = 'block';
+                    contentDiv.innerHTML = adCode;
+                } else {
+                    // Hide container
+                    container.style.display = 'none';
+                    contentDiv.innerHTML = ''; // Clear any previous content
+                }
+            }
+        }
+
+        // Admin panel functions
         function openAdminPanel() {
-            document.getElementById('admin-default-secret').value = localStorage.getItem('rog_secret') || 'JBSWY3DPEHPK3PXP';
+            // Get values from local storage, or leave empty if not present
+            document.getElementById('admin-default-secret').value = localStorage.getItem('rog_secret') || '';
             document.getElementById('admin-otp-timer').value = localStorage.getItem('rog_timer') || '30';
             document.getElementById('admin-site-status').value = localStorage.getItem('rog_status') || 'active';
             document.getElementById('admin-brand').value = localStorage.getItem('rog_brand') || 'ROG HUB';
             document.getElementById('admin-notice').value = localStorage.getItem('rog_notice') || '';
+            
+            // Load all 10 ad codes
+            for (let i = 1; i <= 10; i++) {
+                const adInput = document.getElementById(`admin-ad-${i}`);
+                if (adInput) {
+                    adInput.value = localStorage.getItem(`rog_ad_${i}`) || '';
+                }
+            }
             
             renderAdminNews();
             document.getElementById('adminOverlay').style.display = 'flex';
@@ -1106,7 +1220,28 @@
             const brand = document.getElementById('admin-brand').value;
             const notice = document.getElementById('admin-notice').value;
             
-            localStorage.setItem('rog_secret', secret);
+            // Save all 10 ad codes
+            for (let i = 1; i <= 10; i++) {
+                const adInput = document.getElementById(`admin-ad-${i}`);
+                if (adInput) {
+                    localStorage.setItem(`rog_ad_${i}`, adInput.value);
+                }
+            }
+            
+            // Only set secret if it's not empty
+            if (secret && secret.trim() !== '') {
+                localStorage.setItem('rog_secret', secret);
+                document.getElementById('secret-input').value = secret;
+                currentSecret = secret;
+                generateCorrectOTP();
+            } else {
+                // If secret is empty, remove previous one
+                localStorage.removeItem('rog_secret');
+                document.getElementById('secret-input').value = '';
+                currentSecret = '';
+                document.getElementById('otp-value').innerText = '------';
+            }
+            
             localStorage.setItem('rog_timer', timer);
             localStorage.setItem('rog_status', status);
             localStorage.setItem('rog_brand', brand);
@@ -1119,7 +1254,7 @@
             
             if (status === 'maintenance') {
                 document.getElementById('maintenance-overlay').style.display = 'flex';
-                document.getElementById('maintenance-text').textContent = notice || 'নেটওয়ার্ক ইনফ্রাস্ট্রাকচার আপগ্রেড করা হচ্ছে।';
+                document.getElementById('maintenance-text').textContent = notice || 'Network infrastructure is being upgraded.';
                 document.getElementById('block-overlay').style.display = 'none';
             } else if (status === 'blocked') {
                 document.getElementById('block-overlay').style.display = 'flex';
@@ -1129,7 +1264,8 @@
                 document.getElementById('block-overlay').style.display = 'none';
             }
             
-            showToast('সেটিংস সংরক্ষিত');
+            renderAds();
+            showToast('Settings saved');
             closeAdminPanel();
         }
 
@@ -1142,7 +1278,7 @@
             }, 2000);
         }
 
-        // ইনপুট ইভেন্ট লিসেনার
+        // Input event listener
         document.addEventListener('DOMContentLoaded', function() {
             const secretInput = document.getElementById('secret-input');
             
@@ -1159,7 +1295,7 @@
             });
         });
 
-        // লোড ইভেন্ট
+        // Load event
         window.onload = function() {
             const savedPrimary = localStorage.getItem('rog_primary');
             const savedSecondary = localStorage.getItem('rog_secondary');
@@ -1171,6 +1307,7 @@
             const savedStatus = localStorage.getItem('rog_status');
             const savedNotice = localStorage.getItem('rog_notice');
             
+            // Only set secret if it exists in storage
             if (savedSecret) {
                 document.getElementById('secret-input').value = savedSecret;
                 currentSecret = savedSecret;
@@ -1183,12 +1320,18 @@
             
             saveNewsToStorage();
             renderNewsFeed();
+            renderAds(); // This will show only ads with content
             
             if (savedStatus === 'maintenance') {
                 document.getElementById('maintenance-overlay').style.display = 'flex';
-                document.getElementById('maintenance-text').textContent = savedNotice || 'নেটওয়ার্ক ইনফ্রাস্ট্রাকচার আপগ্রেড করা হচ্ছে।';
+                document.getElementById('maintenance-text').textContent = savedNotice || 'Network infrastructure is being upgraded.';
+                document.getElementById('block-overlay').style.display = 'none';
             } else if (savedStatus === 'blocked') {
                 document.getElementById('block-overlay').style.display = 'flex';
+                document.getElementById('maintenance-overlay').style.display = 'none';
+            } else {
+                document.getElementById('maintenance-overlay').style.display = 'none';
+                document.getElementById('block-overlay').style.display = 'none';
             }
         };
     </script>
