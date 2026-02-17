@@ -1,431 +1,687 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>ROG FB TEAM· stealth</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>R O G | 2FA অথেন্টিকেটর</title>
+    <meta name="theme-color" content="#0b0d17">
+
+    <!-- OTP Auth Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.2/otpauth.umd.min.js"></script>
+
+    <!-- Premium Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* ---------- TOTAL MINIMAL: ONLY INPUT AT VERY TOP, NO EXTRA SPACE ---------- */
+        :root {
+            --bg-deep: #0b0d17;
+            --bg-surface: #141625;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-brand: linear-gradient(to right, #fff, var(--primary));
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
         }
 
         body {
-            background-color: #0c0f1a;
-            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1rem 1.5rem;
+            background: rgba(11, 13, 23, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            opacity: 1;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* ---------- EVERYTHING HIDDEN EXCEPT LOGO-BOX ---------- */
-        .header, .main-box, .footer, .datetime, .btn, .code-display, .timer-bar,
-        .scroll-text, h2, button:not(#miniClearBtn):not(#miniPasteBtn), .footer div, .logo-text,
-        br, hr, [class*="Appear"], [class*="pulse"], .btn.red, .btn, .main-box * {
-            display: none !important;
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: var(--gradient-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
         }
 
-        /* ---------- THE ONLY VISIBLE CONTAINER: LOGO-BOX ---------- */
-        .logo-box {
-            display: flex !important;
-            visibility: visible !important;
+        .admin-link {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-link:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1025px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2.5rem;
+                padding: 0 2rem;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px -10px var(--primary);
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary);
+        }
+
+        /* OTP Section */
+        .otp-display {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 1.2rem;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .otp-code {
+            font-size: clamp(2rem, 10vw, 4rem);
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            word-break: break-all;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .timer-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0 auto 1rem auto;
+            width: 90%;
+            direction: ltr;
+        }
+
+        #timer-progress {
+            height: 100%;
+            background: var(--primary);
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        .timer-text {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Secret Input Area */
+        .secret-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        #secret-input {
+            width: 100%;
+            background: #1c1e2e;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 1rem;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            outline: none;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        #secret-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+        }
+
+        .paste-btn {
+            width: 100%;
+            background: var(--primary);
+            color: var(--bg-deep);
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .paste-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px var(--primary);
+        }
+
+        .paste-btn i {
+            font-size: 1.1rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: #1c1e2e;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 1rem;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            outline: none;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        select, textarea {
+            cursor: pointer;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: var(--bg-deep);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px var(--primary);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: white !important;
+        }
+
+        .btn-danger {
+            background: var(--danger) !important;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626 !important;
+        }
+
+        /* News Feed */
+        .news-item .news-delete {
+            display: none;
+        }
+
+        .news-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 1.2rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .news-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .news-body {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .news-time {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 1rem;
+            opacity: 0.5;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Admin Panel Modal */
+        .admin-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .admin-modal {
+            background: var(--bg-surface);
+            border: 1px solid var(--primary);
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8);
+        }
+
+        .admin-modal h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .admin-close:hover {
+            background: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .admin-section {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-section h3 {
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .admin-item label {
+            display: block;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Password Prompt */
+        .password-prompt {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .password-modal {
+            background: var(--bg-surface);
+            border: 1px solid var(--primary);
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .password-modal h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-modal input {
+            margin-bottom: 1rem;
+        }
+
+        .password-modal .btn {
+            margin-bottom: 0.5rem;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Theme Picker */
+        .theme-picker {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .color-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.2);
+            border-color: white;
+        }
+
+        .color-dot.active {
+            border-color: white;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* News List in Admin */
+        .admin-news-list {
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .admin-news-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-news-info {
+            flex: 1;
+        }
+
+        .admin-news-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .admin-news-preview {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        .admin-news-delete {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 10px;
+        }
+
+        .admin-news-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            left: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            text-align: center;
+            transform: translateY(200%);
+            transition: var(--transition);
+            z-index: 3000;
+        }
+
+        @media (min-width: 768px) {
+            #toast {
+                left: auto;
+                width: auto;
+                padding: 1rem 2.5rem;
+            }
+        }
+
+        #toast.show {
+            transform: translateY(0);
+        }
+
+        /* Overlays */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 2000;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            max-width: 500px;  /* একটু বড় করলাম */
-            margin: 0 auto;
-            padding: 0 15px;
-            background: transparent !important;
-            box-shadow: none !important;
-            border: none !important;
-            transform: none !important;
-            animation: none !important;
-            position: relative;
-            top: 0;
-            left: 0;
-            right: 0;
-        }
-
-        /* input field */
-        #twofa {
-            display: block !important;
-            visibility: visible !important;
-            width: 100%;
-            padding: 18px 22px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 500;
-            background-color: #111;
-            border: 2px solid #2a4a5a;
-            border-radius: 50px;
-            color: #f0f9ff;
-            letter-spacing: 2px;
             text-align: center;
-            outline: none;
-            transition: 0.2s;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            caret-color: #8ad4ff;
-            line-height: 1.4;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            -webkit-appearance: none;
-            appearance: none;
+            padding: 2rem;
+            cursor: pointer; /* ক্লিকযোগ্য করার জন্য */
         }
 
-        #twofa:focus {
-            border-color: #5db0e0;
-            background-color: #161c24;
-            box-shadow: 0 0 0 3px rgba(70, 170, 255, 0.2);
-        }
-
-        /* placeholder style */
-        #twofa::placeholder {
-            color: #b4ecff;
-            font-weight: 500;
-            opacity: 1;
-            text-shadow: 0 0 5px rgba(0,220,255,0.3);
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-        }
-
-        /* পেস্ট বাটন - উপরে */
-        .paste-btn-container {
-            display: flex !important;
-            visibility: visible !important;
-            width: 100%;
-            margin-bottom: 14px;
-            justify-content: center;
-        }
-
-        #miniPasteBtn {
-            display: inline-block !important;
-            visibility: visible !important;
-            width: 100%;
-            max-width: 300px;  /* ইনপুট বক্সের সমান সাইজ */
-            padding: 14px 20px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #f0f9ff;
-            background: rgba(20, 35, 45, 0.7);
-            border: 2px solid #3e5a68;
-            border-radius: 50px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            backdrop-filter: blur(4px);
+        .delete-all-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
-            border: 2px dashed #5f8a9a;
-            text-align: center;
-        }
-
-        #miniPasteBtn:hover {
-            background: #2a404c;
-            color: white;
-            border-color: #92c9d9;
-            transform: scale(1.02);
-        }
-
-        /* ক্লিয়ার বাটন - নিচে */
-        .clear-btn-container {
-            display: flex !important;
-            visibility: visible !important;
-            width: 100%;
-            margin-top: 1px;
-            justify-content: center;
-        }
-
-        #miniClearBtn {
-            display: inline-block !important;
-            visibility: visible !important;
-            width: 100%;
-            max-width: 300px;  /* পেস্ট বাটনের সমান সাইজ */
-            padding: 14px 20px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #f0f9ff;
-            background: rgba(40, 30, 30, 0.7);
-            border: 2px solid #684e4e;
-            border-radius: 50px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            backdrop-filter: blur(4px);
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
-            border: 2px dashed #9a6f6f;
-            text-align: center;
-        }
-
-        #miniClearBtn:hover {
-            background: #4a3030;
-            color: white;
-            border-color: #d99292;
-            transform: scale(1.02);
-        }
-
-        /* force header to be at the very top edge */
-        .header {
-            display: flex !important;
-            visibility: visible !important;
-            justify-content: center;
+            transition: var(--transition);
+            display: inline-flex;
             align-items: center;
-            width: 100%;
-            background: transparent;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            top: 0;
-            left: 0;
-            right: 0;
-            flex-shrink: 0;
+            gap: 0.3rem;
+            margin-left: 1rem;
         }
 
-        /* remove any leftover onclick / anchor behavior */
-        .logo-box[onclick] {
-            pointer-events: none;
+        .delete-all-btn:hover {
+            background: var(--danger);
+            color: white;
         }
-
-        /* body top padding */
-        body {
-            padding-top: 10px;
-        }
-
-        /* no extra space anywhere */
-        .logo-box {
-            margin-top: 0;
-            padding-top: 0;
-        }
-
-        /* ensure no residual footer-like spacing */
-        body > *:not(.header) {
-            display: none !important;
-        }
-
-        /* complete top alignment */
-        .header {
-            order: -1;
-            margin-top: 0;
-            padding-top: 0;
-        }
-
-        /* hide everything else */
-        .datetime, .logo-text, .scroll-text, .footer, .main-box, h2, 
-        .btn, .code-display, .timer-bar {
-            display: none !important;
-        }
-
-        /* responsive */
-        @media (max-width: 480px) {
-            .logo-box {
-                max-width: 100%;
-                padding: 0 10px;
-            }
-            
-            #twofa {
-                font-size: 1rem;
-                padding: 15px 15px;
-            }
-            
-            #miniPasteBtn, #miniClearBtn {
-                max-width: 100%;
-                font-size: 1rem;
-                padding: 12px 15px;
-            }
-        }
-
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
 
-<!-- ===== HEADER WITH LOGO-BOX ===== -->
-<div class="header">
-    <div class="logo-box">
-        <!-- ইনপুট বক্স -->
-        <input id="twofa" type="text" placeholder="🇷 🇴 🇬  𝐏𝐀𝐒𝐓𝐄 𝟐𝐅𝐀  →  𝐀𝐔𝐓𝐎 𝐂𝐎𝐏𝐘">
-        
-        <!-- পেস্ট বাটন - উপরে -->
-        <div class="paste-btn-container">
-            <button class="mini-btn" id="miniPasteBtn">📋 PASTE SECRET KEY</button>
-        </div>
-        
-        <!-- ক্লিয়ার বাটন - নিচে -->
-        <div class="clear-btn-container">
-            <button class="mini-btn" id="miniClearBtn">🗑 CLEAR ALL</button>
+    <!-- Status Overlays - এখন ক্লিকযোগ্য এবং ট্যাপ কাউন্টার সহ -->
+    <div id="maintenance-overlay" class="overlay" onclick="handleOverlayClick()">
+        <h1 style="color: var(--warning);">🔧 সিস্টেম আপডেট</h1>
+        <p id="maintenance-text">নেটওয়ার্ক ইনফ্রাস্ট্রাকচার আপগ্রেড করা হচ্ছে। কিছুক্ষণ পর আবার চেষ্টা করুন।</p>
+        <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">অ্যাডমিন প্যানেল খুলতে ৫ বার ট্যাপ করুন</p>
+    </div>
+
+    <div id="block-overlay" class="overlay" onclick="handleOverlayClick()">
+        <h1 style="color: var(--danger);">⛔ অ্যাক্সেস অস্বীকৃত</h1>
+        <p>প্ল্যাটফর্মটি হাই-সিকিউরিটি লকডাউন মোডে আছে। সব পাবলিক ট্রানজেকশন স্থগিত করা হয়েছে।</p>
+        <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">অ্যাডমিন প্যানেল খুলতে ৫ বার ট্যাপ করুন</p>
+    </div>
+
+    <!-- Password Prompt Modal -->
+    <div class="password-prompt" id="passwordPrompt">
+        <div class="password-modal">
+            <h3><i class="fa-solid fa-lock"></i> অ্যাডমিন প্যানেল</h3>
+            <input type="password" id="admin-password" placeholder="পাসওয়ার্ড দিন" autocomplete="off">
+            <button class="btn" onclick="checkPassword()">প্রবেশ করুন</button>
+            <button class="btn btn-secondary" onclick="closePasswordPrompt()">বাতিল</button>
+            <div class="error-message" id="password-error">ভুল পাসওয়ার্ড!</div>
         </div>
     </div>
-</div>
 
-<script>
-    (function() {
-        "use strict";
+    <!-- Admin Modal -->
+    <div class="admin-overlay" id="adminOverlay">
+        <div class="admin-modal">
+            <button class="admin-close" onclick="closeAdminPanel()"><i class="fa-solid fa-times"></i></button>
+            
+            <h2><i class="fa-solid fa-lock"></i> অ্যাডমিন কন্ট্রোল প্যানেল</h2>
 
-        // ---------- TOTP core ----------
-        function base32Decode(base32) {
-            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-            base32 = base32.replace(/\s+/g, '').replace(/=+$/, '').toUpperCase();
-            let bits = 0, value = 0, output = [];
-            for (let i = 0; i < base32.length; i++) {
-                const char = base32[i];
-                const index = alphabet.indexOf(char);
-                if (index === -1) throw new Error('Invalid Base32');
-                value = (value << 5) | index;
-                bits += 5;
-                if (bits >= 8) {
-                    output.push((value >>> (bits - 8)) & 0xFF);
-                    bits -= 8;
-                }
-            }
-            return new Uint8Array(output);
-        }
-
-        function generateTOTP(secret) {
-            try {
-                const key = base32Decode(secret);
-                const keyWA = CryptoJS.lib.WordArray.create(key);
-                const timeStep = 30;
-                const counter = Math.floor(Date.now() / 1000 / timeStep);
-                const counterBytes = new ArrayBuffer(8);
-                const counterView = new DataView(counterBytes);
-                counterView.setUint32(4, counter);
-                const counterWA = CryptoJS.lib.WordArray.create(new Uint8Array(counterBytes));
-                const hmac = CryptoJS.HmacSHA1(counterWA, keyWA);
-                const hmacHex = hmac.toString(CryptoJS.enc.Hex);
-                const offset = parseInt(hmacHex.substr(39, 1), 16) * 2;
-                const otpHex = hmacHex.substr(offset, 8);
-                let otp = parseInt(otpHex, 16) & 0x7FFFFFFF;
-                otp = otp % 1000000;
-                return otp.toString().padStart(6, '0');
-            } catch (e) {
-                console.error('TOTP error:', e);
-                throw new Error('invalid key');
-            }
-        }
-
-        // ---------- state ----------
-        let currentSecret = '';
-        let timerInterval = null;
-        const inputField = document.getElementById('twofa');
-
-        // ---------- generate and auto-copy ----------
-        function generateAndCopy(secret) {
-            if (!secret || secret.length < 16) return;
-            try {
-                const code = generateTOTP(secret);
-                navigator.clipboard.writeText(code).catch(() => {
-                    const fallback = document.createElement('input');
-                    fallback.style.position = 'fixed';
-                    fallback.style.opacity = '0';
-                    fallback.value = code;
-                    document.body.appendChild(fallback);
-                    fallback.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(fallback);
-                });
-            } catch (err) {}
-        }
-
-        // ---------- trigger on input/paste ----------
-        function onSecretInput() {
-            const raw = inputField.value.trim();
-            if (raw.length >= 16) {
-                currentSecret = raw;
-                generateAndCopy(currentSecret);
-                startTimer();
-            } else {
-                currentSecret = '';
-                stopTimer();
-            }
-        }
-
-        function startTimer() {
-            stopTimer();
-            if (currentSecret) generateAndCopy(currentSecret);
-            timerInterval = setInterval(() => {
-                if (currentSecret && currentSecret.length >= 16) {
-                    const nowSec = Math.floor(Date.now() / 1000);
-                    const remaining = 30 - (nowSec % 30);
-                    if (remaining === 30 || remaining <= 1) {
-                        generateAndCopy(currentSecret);
-                    }
-                } else {
-                    stopTimer();
-                }
-            }, 1000);
-        }
-
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        }
-
-        function clearAll() {
-            inputField.value = '';
-            currentSecret = '';
-            stopTimer();
-        }
-
-        // ---------- পেস্ট বাটন ফাংশন ----------
-        async function pasteFromClipboard() {
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    const cleanedText = text.replace(/\s+/g, '').toUpperCase();
-                    inputField.value = cleanedText;
-                    onSecretInput();
-                }
-            } catch (err) {
-                console.log('Clipboard read failed, using fallback');
-                inputField.focus();
-                document.execCommand('paste');
-            }
-        }
-
-        // ---------- listeners ----------
-        inputField.addEventListener('input', onSecretInput);
-        inputField.addEventListener('paste', () => setTimeout(onSecretInput, 10));
-
-        // পেস্ট বাটন
-        const pasteBtn = document.getElementById('miniPasteBtn');
-        if (pasteBtn) {
-            pasteBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                pasteFromClipboard();
-            });
-        }
-
-        // ক্লিয়ার বাটন
-        const clearBtn = document.getElementById('miniClearBtn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                clearAll();
-            });
-        }
-
-        window.addEventListener('load', () => {
-            if (inputField.value.trim().length >= 16) onSecretInput();
-        });
-
-        // kill old onclick from logo-box
-        const logo = document.querySelector('.logo-box');
-        if (logo) logo.removeAttribute('onclick');
-
-        // clear any global timers from previous version
-        if (window.timerInterval) clearInterval(window.timerInterval);
-    })();
-</script>
-
-</body>
-</html>
+            <!-- থিম কাস্টমাইজার সেকশন -->
+            <div class="admin-section">
+                <h3><i class="fa-solid fa-palette"></i> থিম কাস্টমাইজার</h3>
+                <div class="theme-picker">
+                    <div class="color-dot" style="background: #38bdf8;" onclick="setTheme('#38bdf8', '#818cf8')" title="আকাশি নীল"></div>
+                    <div class="color-dot" style="background: #fbbf24;" onclick="setTheme('#fbbf24', '#f59e0b')" title="হলুদ"></div>
+                    <div class="color-dot" style="background: #34d399;" onclick="setTheme('#34d399', '#10b981')" title="সবুজ"></div>
+                    <div class="color-dot" style="background: #f87171;" onclick="setTheme('#f87171', '#ef4444')" title="লাল"></div>
+                    <div class="color-dot" style="background: #c084fc;" onclick="setTheme('#c084fc', '#a78bfa')" title="পার্পল"></div>
+                    <div class="color-dot" style="background: #f47
