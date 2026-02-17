@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>R O G | 2FA Authenticator</title>
+    <title>R O G | Secure Portal</title>
     <meta name="theme-color" content="#0b0d17">
 
     <!-- OTP Auth Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.2/otpauth.umd.min.js"></script>
+
+    <!-- Firebase SDK (Added) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <!-- Premium Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* একই স্টাইল উপরের কোডে আছে—স্থান বাঁচাতে এখানে পুরো স্টাইল না দিয়ে শুধু প্রয়োজনীয় অংশ রাখলেও চলবে। তবে সম্পূর্ণ কোডে স্টাইল আগের মতোই থাকবে। */
         :root {
             --bg-deep: #0b0d17;
             --bg-surface: #141625;
@@ -49,7 +54,6 @@
             flex-direction: column;
         }
 
-        /* Navigation */
         nav {
             padding: 1rem 1.5rem;
             background: rgba(11, 13, 23, 0.85);
@@ -94,7 +98,6 @@
             transform: translateY(-2px);
         }
 
-        /* Container */
         .container {
             width: 100%;
             max-width: 1300px;
@@ -113,7 +116,6 @@
             }
         }
 
-        /* Cards */
         .card {
             background: var(--bg-surface);
             border: 1px solid var(--border);
@@ -140,7 +142,6 @@
             color: var(--primary);
         }
 
-        /* OTP Section */
         .otp-display {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border);
@@ -189,7 +190,6 @@
             gap: 0.5rem;
         }
 
-        /* Secret Input Area */
         .secret-container {
             display: flex;
             flex-direction: column;
@@ -304,7 +304,6 @@
             background: #dc2626 !important;
         }
 
-        /* News Feed */
         .news-item .news-delete {
             display: none;
         }
@@ -354,7 +353,6 @@
             gap: 5px;
         }
 
-        /* Ad Sections */
         .ad-container {
             margin-top: 1.5rem;
             padding-top: 1rem;
@@ -387,7 +385,6 @@
             color: var(--text-dim);
         }
 
-        /* Admin Panel Modal */
         .admin-overlay {
             position: fixed;
             inset: 0;
@@ -484,7 +481,6 @@
             }
         }
 
-        /* Password Prompt */
         .password-prompt {
             position: fixed;
             inset: 0;
@@ -528,7 +524,6 @@
             display: none;
         }
 
-        /* Theme Picker */
         .theme-picker {
             display: flex;
             gap: 0.5rem;
@@ -555,7 +550,6 @@
             box-shadow: 0 0 15px currentColor;
         }
 
-        /* News List in Admin */
         .admin-news-list {
             margin-top: 1rem;
             max-height: 300px;
@@ -610,7 +604,6 @@
             color: white;
         }
 
-        /* Toast */
         #toast {
             position: fixed;
             bottom: 2rem;
@@ -639,7 +632,6 @@
             transform: translateY(0);
         }
 
-        /* Overlays */
         .overlay {
             position: fixed;
             inset: 0;
@@ -678,7 +670,6 @@
 </head>
 <body>
 
-    <!-- Status Overlays -->
     <div id="maintenance-overlay" class="overlay" onclick="handleOverlayClick(event)">
         <h1 style="color: var(--warning);">🔧 System Update</h1>
         <p id="maintenance-text">Network infrastructure is being upgraded. Please try again in a moment.</p>
@@ -691,7 +682,6 @@
         <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">Tap 5 times to open admin panel</p>
     </div>
 
-    <!-- Password Prompt Modal -->
     <div class="password-prompt" id="passwordPrompt">
         <div class="password-modal">
             <h3><i class="fa-solid fa-lock"></i> Admin Panel</h3>
@@ -702,14 +692,12 @@
         </div>
     </div>
 
-    <!-- Admin Modal -->
     <div class="admin-overlay" id="adminOverlay">
         <div class="admin-modal">
             <button class="admin-close" onclick="closeAdminPanel()"><i class="fa-solid fa-times"></i></button>
             
             <h2><i class="fa-solid fa-lock"></i> Admin Control Panel</h2>
 
-            <!-- Theme Customizer Section -->
             <div class="admin-section">
                 <h3><i class="fa-solid fa-palette"></i> Theme Customizer</h3>
                 <div class="theme-picker">
@@ -798,7 +786,6 @@
                 <div id="admin-news-list" class="admin-news-list"></div>
             </div>
 
-            <!-- Ad Management Section (10 Ads) -->
             <div class="admin-section">
                 <h3><i class="fa-solid fa-ad"></i> Ad Management (10 Slots)</h3>
                 
@@ -850,7 +837,6 @@
         </div>
     </div>
 
-    <!-- Navigation -->
     <nav>
         <div class="brand" id="main-brand">ROG <span style="font-weight: 300; opacity: 0.5;">HUB</span></div>
         <div class="admin-link" onclick="openPasswordPrompt()">
@@ -859,7 +845,6 @@
     </nav>
 
     <main class="container">
-        <!-- 2FA Authenticator Section -->
         <section class="card">
             <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Two-Factor Authenticator</div>
             
@@ -883,12 +868,10 @@
             </small>
         </section>
 
-        <!-- News Feed Section with Ads (10 slots) -->
         <section class="card">
             <div class="card-title"><i class="fa-solid fa-newspaper"></i> Live News Feed</div>
             <div id="news-feed-container"></div>
             
-            <!-- Ad containers 1-10 (hidden by default) -->
             <div class="ad-container" id="ad-container-1" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-1"></div></div></div>
             <div class="ad-container" id="ad-container-2" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-2"></div></div></div>
             <div class="ad-container" id="ad-container-3" style="display: none;"><div class="ad-space"><div class="ad-label">Advertisement</div><div class="ad-content" id="ad-content-3"></div></div></div>
@@ -902,26 +885,131 @@
         </section>
     </main>
 
-    <!-- Toast Notification -->
     <div id="toast">Copied!</div>
 
     <script>
-        // Tap counter variables
+        // ==================== Firebase Initialization ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAcCLChnvJwCc99SJVtIDb0SzUmSYL24o",
+            authDomain: "rog-2fa-tool.firebaseapp.com",
+            projectId: "rog-2fa-tool",
+            storageBucket: "rog-2fa-tool.firebasestorage.app",
+            messagingSenderId: "1016081799180",
+            appId: "1:1016081799180:web:733164f4ab45c46d924f629",
+            measurementId: "G-168SSKWYTV"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ==================== Global Variables ====================
         let tapCount = 0;
         let tapTimer;
 
-        // Data storage
         let newsItems = JSON.parse(localStorage.getItem('rog_news')) || [
             { id: '1', title: 'Security Update', body: 'Two-factor verification has been made mandatory.', time: Date.now() - 3600000 },
             { id: '2', title: 'New Feature', body: 'Theme customization has been added!', time: Date.now() - 7200000 }
         ];
 
-        // OTP timer variables
         let otpInterval;
         let timerSeconds = 30;
         let currentSecret = '';
 
-        // Theme functions
+        // ==================== Firebase Sync Functions ====================
+        function saveSettingsToFirebase(settings) {
+            database.ref('settings').set(settings);
+        }
+
+        function saveNewsToFirebase() {
+            const newsObject = {};
+            newsItems.forEach(item => {
+                newsObject[item.id] = item;
+            });
+            database.ref('news').set(newsObject);
+        }
+
+        function saveAdsToFirebase() {
+            const ads = {};
+            for (let i = 1; i <= 10; i++) {
+                const adInput = document.getElementById(`admin-ad-${i}`);
+                if (adInput) {
+                    ads[`ad_${i}`] = adInput.value;
+                }
+            }
+            database.ref('ads').set(ads);
+        }
+
+        // Listen for changes from Firebase (real-time)
+        database.ref('settings').on('value', (snapshot) => {
+            const settings = snapshot.val();
+            if (settings) {
+                // Update localStorage and UI
+                if (settings.secret) {
+                    localStorage.setItem('rog_secret', settings.secret);
+                    document.getElementById('secret-input').value = settings.secret;
+                    currentSecret = settings.secret;
+                    generateCorrectOTP();
+                } else {
+                    localStorage.removeItem('rog_secret');
+                }
+                if (settings.timer) {
+                    localStorage.setItem('rog_timer', settings.timer);
+                    timerSeconds = parseInt(settings.timer);
+                    startOtpTimer(timerSeconds);
+                }
+                if (settings.brand) {
+                    localStorage.setItem('rog_brand', settings.brand);
+                    document.getElementById('main-brand').innerHTML = settings.brand + ' <span style="font-weight: 300; opacity: 0.5;">HUB</span>';
+                }
+                if (settings.status) {
+                    localStorage.setItem('rog_status', settings.status);
+                    const status = settings.status;
+                    const notice = settings.notice || '';
+                    if (status === 'maintenance') {
+                        document.getElementById('maintenance-overlay').style.display = 'flex';
+                        document.getElementById('maintenance-text').textContent = notice || 'Network infrastructure is being upgraded.';
+                        document.getElementById('block-overlay').style.display = 'none';
+                    } else if (status === 'blocked') {
+                        document.getElementById('block-overlay').style.display = 'flex';
+                        document.getElementById('maintenance-overlay').style.display = 'none';
+                    } else {
+                        document.getElementById('maintenance-overlay').style.display = 'none';
+                        document.getElementById('block-overlay').style.display = 'none';
+                    }
+                }
+                if (settings.notice) {
+                    localStorage.setItem('rog_notice', settings.notice);
+                }
+                if (settings.primary) {
+                    setTheme(settings.primary, settings.secondary || settings.primary);
+                }
+            }
+        });
+
+        database.ref('news').on('value', (snapshot) => {
+            const news = snapshot.val();
+            if (news) {
+                newsItems = Object.values(news);
+                localStorage.setItem('rog_news', JSON.stringify(newsItems));
+                renderNewsFeed();
+                if (document.getElementById('adminOverlay').style.display === 'flex') {
+                    renderAdminNews();
+                }
+            }
+        });
+
+        database.ref('ads').on('value', (snapshot) => {
+            const ads = snapshot.val();
+            if (ads) {
+                for (let i = 1; i <= 10; i++) {
+                    const adCode = ads[`ad_${i}`] || '';
+                    localStorage.setItem(`rog_ad_${i}`, adCode);
+                }
+                renderAds();
+            }
+        });
+
+        // ==================== Original Functions (with Firebase additions) ====================
         function setTheme(primary, secondary) {
             document.documentElement.style.setProperty('--primary', primary);
             document.documentElement.style.setProperty('--secondary', secondary || primary);
@@ -935,7 +1023,6 @@
             setTheme(color, color);
         }
 
-        // Overlay click handler
         function handleOverlayClick(event) {
             event.stopPropagation();
             
@@ -953,7 +1040,6 @@
             }
         }
 
-        // Password functions
         function openPasswordPrompt() {
             document.getElementById('passwordPrompt').style.display = 'flex';
             document.getElementById('admin-password').value = '';
@@ -974,7 +1060,6 @@
             }
         }
 
-        // Clipboard paste function
         async function pasteFromClipboard() {
             try {
                 const text = await navigator.clipboard.readText();
@@ -985,7 +1070,6 @@
             }
         }
 
-        // Process secret and generate OTP
         function processSecret(secret) {
             if (!secret || secret.trim() === '') {
                 document.getElementById('otp-value').innerText = '------';
@@ -996,7 +1080,6 @@
             generateCorrectOTP();
         }
 
-        // Generate correct OTP
         function generateCorrectOTP() {
             if (!currentSecret) return;
             
@@ -1035,7 +1118,6 @@
             }
         }
 
-        // Start timer
         function startOtpTimer(seconds = 30) {
             if (otpInterval) clearInterval(otpInterval);
             
@@ -1067,7 +1149,6 @@
             otpInterval = setInterval(updateTimer, 100);
         }
 
-        // News functions
         function saveNewsToStorage() {
             localStorage.setItem('rog_news', JSON.stringify(newsItems));
         }
@@ -1125,6 +1206,7 @@
         function deleteNews(id) {
             newsItems = newsItems.filter(item => item.id != id);
             saveNewsToStorage();
+            saveNewsToFirebase(); // Sync to Firebase
             renderNewsFeed();
             renderAdminNews();
             showToast('News deleted');
@@ -1134,6 +1216,7 @@
             if (confirm('Are you sure you want to delete all news?')) {
                 newsItems = [];
                 saveNewsToStorage();
+                saveNewsToFirebase(); // Sync to Firebase
                 renderNewsFeed();
                 renderAdminNews();
                 showToast('All news deleted');
@@ -1158,6 +1241,7 @@
             
             newsItems.push(newItem);
             saveNewsToStorage();
+            saveNewsToFirebase(); // Sync to Firebase
             renderNewsFeed();
             renderAdminNews();
             clearNewsInputs();
@@ -1169,7 +1253,23 @@
             document.getElementById('admin-news-body').value = '';
         }
 
-        // Ad rendering functions - now 10 ads
+        function injectAdHTML(container, html) {
+            container.innerHTML = html;
+            const scripts = container.querySelectorAll('script');
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => {
+                    newScript.setAttribute(attr.name, attr.value);
+                });
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+        }
+
         function renderAds() {
             for (let i = 1; i <= 10; i++) {
                 const adCode = localStorage.getItem(`rog_ad_${i}`) || '';
@@ -1177,27 +1277,22 @@
                 const contentDiv = document.getElementById(`ad-content-${i}`);
                 
                 if (adCode && adCode.trim() !== '') {
-                    // Show container and set content
                     container.style.display = 'block';
-                    contentDiv.innerHTML = adCode;
+                    injectAdHTML(contentDiv, adCode);
                 } else {
-                    // Hide container
                     container.style.display = 'none';
-                    contentDiv.innerHTML = ''; // Clear any previous content
+                    contentDiv.innerHTML = '';
                 }
             }
         }
 
-        // Admin panel functions
         function openAdminPanel() {
-            // Get values from local storage, or leave empty if not present
             document.getElementById('admin-default-secret').value = localStorage.getItem('rog_secret') || '';
             document.getElementById('admin-otp-timer').value = localStorage.getItem('rog_timer') || '30';
             document.getElementById('admin-site-status').value = localStorage.getItem('rog_status') || 'active';
             document.getElementById('admin-brand').value = localStorage.getItem('rog_brand') || 'ROG HUB';
             document.getElementById('admin-notice').value = localStorage.getItem('rog_notice') || '';
             
-            // Load all 10 ad codes
             for (let i = 1; i <= 10; i++) {
                 const adInput = document.getElementById(`admin-ad-${i}`);
                 if (adInput) {
@@ -1220,22 +1315,22 @@
             const brand = document.getElementById('admin-brand').value;
             const notice = document.getElementById('admin-notice').value;
             
-            // Save all 10 ad codes
+            // Collect ad data
+            const ads = {};
             for (let i = 1; i <= 10; i++) {
                 const adInput = document.getElementById(`admin-ad-${i}`);
                 if (adInput) {
                     localStorage.setItem(`rog_ad_${i}`, adInput.value);
+                    ads[`ad_${i}`] = adInput.value;
                 }
             }
             
-            // Only set secret if it's not empty
             if (secret && secret.trim() !== '') {
                 localStorage.setItem('rog_secret', secret);
                 document.getElementById('secret-input').value = secret;
                 currentSecret = secret;
                 generateCorrectOTP();
             } else {
-                // If secret is empty, remove previous one
                 localStorage.removeItem('rog_secret');
                 document.getElementById('secret-input').value = '';
                 currentSecret = '';
@@ -1264,6 +1359,21 @@
                 document.getElementById('block-overlay').style.display = 'none';
             }
             
+            // Sync to Firebase
+            const settings = {
+                secret: secret || null,
+                timer: timer,
+                status: status,
+                brand: brand,
+                notice: notice,
+                primary: getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(),
+                secondary: getComputedStyle(document.documentElement).getPropertyValue('--secondary').trim()
+            };
+            saveSettingsToFirebase(settings);
+            
+            // Sync ads to Firebase
+            database.ref('ads').set(ads);
+            
             renderAds();
             showToast('Settings saved');
             closeAdminPanel();
@@ -1278,7 +1388,6 @@
             }, 2000);
         }
 
-        // Input event listener
         document.addEventListener('DOMContentLoaded', function() {
             const secretInput = document.getElementById('secret-input');
             
@@ -1295,7 +1404,6 @@
             });
         });
 
-        // Load event
         window.onload = function() {
             const savedPrimary = localStorage.getItem('rog_primary');
             const savedSecondary = localStorage.getItem('rog_secondary');
@@ -1307,7 +1415,6 @@
             const savedStatus = localStorage.getItem('rog_status');
             const savedNotice = localStorage.getItem('rog_notice');
             
-            // Only set secret if it exists in storage
             if (savedSecret) {
                 document.getElementById('secret-input').value = savedSecret;
                 currentSecret = savedSecret;
@@ -1320,7 +1427,7 @@
             
             saveNewsToStorage();
             renderNewsFeed();
-            renderAds(); // This will show only ads with content
+            renderAds();
             
             if (savedStatus === 'maintenance') {
                 document.getElementById('maintenance-overlay').style.display = 'flex';
