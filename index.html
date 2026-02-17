@@ -684,4 +684,513 @@
                     <div class="color-dot" style="background: #34d399;" onclick="setTheme('#34d399', '#10b981')" title="সবুজ"></div>
                     <div class="color-dot" style="background: #f87171;" onclick="setTheme('#f87171', '#ef4444')" title="লাল"></div>
                     <div class="color-dot" style="background: #c084fc;" onclick="setTheme('#c084fc', '#a78bfa')" title="পার্পল"></div>
-                    <div class="color-dot" style="background: #f47
+                    <div class="color-dot" style="background: #f472b6;" onclick="setTheme('#f472b6', '#ec4899')" title="পিঙ্ক"></div>
+                </div>
+                <div class="admin-item">
+                    <label>কাস্টম প্রাইমারি কালার</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="color" id="customPrimary" value="#38bdf8" style="width: 60px; height: 50px; padding: 0;">
+                        <button class="btn btn-secondary" onclick="applyCustomColor()" style="padding: 0.5rem 1rem;">প্রয়োগ</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3><i class="fa-solid fa-shield"></i> সিকিউরিটি সেটিংস</h3>
+                
+                <div class="admin-item">
+                    <label>ডিফল্ট সিক্রেট কী</label>
+                    <input type="text" id="admin-default-secret" placeholder="BASE32-SECRET-KEY" value="JBSWY3DPEHPK3PXP">
+                </div>
+
+                <div class="admin-item">
+                    <label>OTP টাইমার (সেকেন্ড)</label>
+                    <select id="admin-otp-timer">
+                        <option value="30">৩০ সেকেন্ড (ডিফল্ট)</option>
+                        <option value="60">৬০ সেকেন্ড</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3><i class="fa-solid fa-globe"></i> সাইট কন্ট্রোল</h3>
+                
+                <div class="admin-grid">
+                    <div class="admin-item">
+                        <label>সাইট স্ট্যাটাস</label>
+                        <select id="admin-site-status">
+                            <option value="active">✅ অ্যাক্টিভ</option>
+                            <option value="maintenance">🔧 রক্ষণাবেক্ষণ</option>
+                            <option value="blocked">⛔ ব্লকড</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-item">
+                        <label>ব্র্যান্ড নাম</label>
+                        <input type="text" id="admin-brand" value="ROG HUB">
+                    </div>
+                </div>
+
+                <div class="admin-item">
+                    <label>নোটিশ মেসেজ</label>
+                    <input type="text" id="admin-notice" placeholder="মেইনটেন্যান্স মেসেজ">
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3>
+                    <i class="fa-solid fa-newspaper"></i> 
+                    নিউজ ম্যানেজমেন্ট
+                    <span class="delete-all-btn" onclick="deleteAllNews()">
+                        <i class="fa-solid fa-trash-can"></i> সব ডিলিট
+                    </span>
+                </h3>
+                
+                <div class="admin-item">
+                    <label>টাইটেল</label>
+                    <input type="text" id="admin-news-title" placeholder="আপডেট টাইটেল">
+                </div>
+
+                <div class="admin-item">
+                    <label>বিবরণ</label>
+                    <textarea id="admin-news-body" rows="3" placeholder="আপডেটের বিস্তারিত..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn" onclick="addNewsItem()" style="flex: 2;">➕ নিউজ যোগ করুন</button>
+                    <button class="btn btn-secondary" onclick="clearNewsInputs()" style="flex: 1;">🗑️ ক্লিয়ার</button>
+                </div>
+
+                <div id="admin-news-list" class="admin-news-list"></div>
+            </div>
+
+            <button class="btn" onclick="saveAdminSettings()" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">
+                <i class="fa-solid fa-save"></i> সব সেটিংস সংরক্ষণ করুন
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="brand" id="main-brand">ROG <span style="font-weight: 300; opacity: 0.5;">HUB</span></div>
+        <div class="admin-link" onclick="openPasswordPrompt()">
+            <i class="fa-solid fa-lock"></i> অ্যাডমিন
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- 2FA Authenticator Section -->
+        <section class="card">
+            <div class="card-title"><i class="fa-solid fa-shield-halved"></i> টু-ফ্যাক্টর অথেন্টিকেটর</div>
+            
+            <div class="secret-container">
+                <input type="text" id="secret-input" placeholder="সিক্রেট কী পেস্ট করুন... (BASE32)" autocomplete="off">
+                <button class="paste-btn" onclick="pasteFromClipboard()">
+                    <i class="fa-solid fa-paste"></i> পেস্ট করুন
+                </button>
+            </div>
+            
+            <div class="otp-display">
+                <div class="otp-code" id="otp-value" onclick="copyOTP()">------</div>
+                <div class="timer-bar"><div id="timer-progress" style="width: 100%"></div></div>
+                <div class="timer-text">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="timer-seconds">30</span> সেকেন্ড
+                </div>
+            </div>
+            <small style="color:var(--text-dim); display: block; text-align: center; margin-top: 0.5rem;">
+                <i class="fa-regular fa-circle-check"></i> OTP অটোমেটিক কপি হয়ে যাবে
+            </small>
+        </section>
+
+        <!-- News Feed Section -->
+        <section class="card">
+            <div class="card-title"><i class="fa-solid fa-newspaper"></i> লাইভ নিউজ ফিড</div>
+            <div id="news-feed-container"></div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast">কপি হয়েছে!</div>
+
+    <script>
+        // ট্যাপ কাউন্টার ভেরিয়েবল
+        let tapCount = 0;
+        let tapTimer;
+
+        // ডেটা স্টোরেজ
+        let newsItems = JSON.parse(localStorage.getItem('rog_news')) || [
+            { id: '1', title: 'সিকিউরিটি আপডেট', body: 'দ্বি-স্তর যাচাইকরণ বাধ্যতামূলক করা হয়েছে।', time: Date.now() - 3600000 },
+            { id: '2', title: 'নতুন ফিচার', body: 'থিম কাস্টমাইজেশন যোগ করা হয়েছে!', time: Date.now() - 7200000 }
+        ];
+
+        // ওটিপি টাইমার ভেরিয়েবল
+        let otpInterval;
+        let timerSeconds = 30;
+        let currentSecret = '';
+
+        // থিম ফাংশন
+        function setTheme(primary, secondary) {
+            document.documentElement.style.setProperty('--primary', primary);
+            document.documentElement.style.setProperty('--secondary', secondary || primary);
+            document.documentElement.style.setProperty('--gradient-brand', `linear-gradient(to right, #fff, ${primary})`);
+            localStorage.setItem('rog_primary', primary);
+            localStorage.setItem('rog_secondary', secondary || primary);
+        }
+
+        function applyCustomColor() {
+            const color = document.getElementById('customPrimary').value;
+            setTheme(color, color);
+        }
+
+        // ওভারলে ক্লিক হ্যান্ডলার (মেইনটেন্স/ব্লক অবস্থায়)
+        function handleOverlayClick() {
+            tapCount++;
+            
+            // ট্যাপ টাইমার রিসেট
+            clearTimeout(tapTimer);
+            tapTimer = setTimeout(() => {
+                tapCount = 0;
+            }, 1000); // ১ সেকেন্ডের মধ্যে ৫ বার ট্যাপ করতে হবে
+            
+            // ৫ বার ট্যাপ করা হলে
+            if (tapCount >= 5) {
+                tapCount = 0;
+                clearTimeout(tapTimer);
+                
+                // স্ট্যাটাস ওভারলে সরিয়ে অ্যাডমিন প্যানেল খুলুন
+                document.getElementById('maintenance-overlay').style.display = 'none';
+                document.getElementById('block-overlay').style.display = 'none';
+                
+                // পাসওয়ার্ড প্রম্পট দেখান
+                openPasswordPrompt();
+            }
+        }
+
+        // পাসওয়ার্ড ফাংশন
+        function openPasswordPrompt() {
+            document.getElementById('passwordPrompt').style.display = 'flex';
+            document.getElementById('admin-password').value = '';
+            document.getElementById('password-error').style.display = 'none';
+        }
+
+        function closePasswordPrompt() {
+            document.getElementById('passwordPrompt').style.display = 'none';
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('admin-password').value;
+            if (password === 'Rohan2007') {
+                closePasswordPrompt();
+                openAdminPanel();
+            } else {
+                document.getElementById('password-error').style.display = 'block';
+            }
+        }
+
+        // ক্লিপবোর্ড থেকে পেস্ট ফাংশন
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('secret-input').value = text;
+                processSecret(text);
+            } catch (err) {
+                showToast('পেস্ট করতে সমস্যা হয়েছে');
+            }
+        }
+
+        // সিক্রেট প্রসেস করে ওটিপি জেনারেট
+        function processSecret(secret) {
+            if (!secret || secret.trim() === '') {
+                document.getElementById('otp-value').innerText = '------';
+                return;
+            }
+            
+            currentSecret = secret.trim().replace(/\s/g, '').toUpperCase();
+            generateCorrectOTP();
+        }
+
+        // সঠিক OTP জেনারেট
+        function generateCorrectOTP() {
+            if (!currentSecret) return;
+            
+            try {
+                let totp = new OTPAuth.TOTP({
+                    secret: OTPAuth.Secret.fromBase32(currentSecret),
+                    digits: 6,
+                    period: timerSeconds
+                });
+                
+                const otp = totp.generate();
+                document.getElementById('otp-value').innerText = otp;
+                
+                copyToClipboard(otp);
+                showToast('OTP কপি হয়েছে!');
+                
+            } catch (e) {
+                console.error('OTP generation error:', e);
+                document.getElementById('otp-value').innerText = '------';
+            }
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+            } catch (err) {
+                console.error('Copy failed:', err);
+            }
+        }
+
+        async function copyOTP() {
+            const otp = document.getElementById('otp-value').innerText;
+            if (otp && otp !== '------') {
+                await copyToClipboard(otp);
+                showToast('OTP কপি হয়েছে!');
+            }
+        }
+
+        // টাইমার স্টার্ট
+        function startOtpTimer(seconds = 30) {
+            if (otpInterval) clearInterval(otpInterval);
+            
+            timerSeconds = seconds;
+            
+            if (currentSecret) {
+                generateCorrectOTP();
+            }
+            
+            function updateTimer() {
+                const now = Date.now();
+                const epoch = Math.floor(now / 1000);
+                const timeInPeriod = epoch % timerSeconds;
+                const remaining = timerSeconds - timeInPeriod;
+                
+                document.getElementById('timer-seconds').innerText = remaining;
+                
+                const progressPercent = ((timerSeconds - timeInPeriod) / timerSeconds) * 100;
+                document.getElementById('timer-progress').style.width = progressPercent + '%';
+                
+                if (remaining === timerSeconds) {
+                    if (currentSecret) {
+                        generateCorrectOTP();
+                    }
+                }
+            }
+            
+            updateTimer();
+            otpInterval = setInterval(updateTimer, 100);
+        }
+
+        // নিউজ ফাংশন
+        function saveNewsToStorage() {
+            localStorage.setItem('rog_news', JSON.stringify(newsItems));
+        }
+
+        function renderNewsFeed() {
+            const container = document.getElementById('news-feed-container');
+            if (!newsItems.length) {
+                container.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 2rem;">কোন নিউজ নেই</div>';
+                return;
+            }
+            
+            const sortedNews = [...newsItems].sort((a, b) => b.time - a.time);
+            
+            let html = '';
+            sortedNews.forEach(item => {
+                const date = new Date(item.time).toLocaleString('bn-BD', {
+                    hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit'
+                });
+                
+                html += `
+                    <div class="news-item" data-id="${item.id}">
+                        <div class="news-header">
+                            <span class="news-title">${item.title}</span>
+                        </div>
+                        <div class="news-body">${item.body}</div>
+                        <div class="news-time"><i class="fa-regular fa-clock"></i> ${date}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderAdminNews() {
+            const listDiv = document.getElementById('admin-news-list');
+            if (!newsItems.length) {
+                listDiv.innerHTML = '<div style="color: var(--text-dim); padding: 1rem; text-align: center;">কোন নিউজ নেই</div>';
+                return;
+            }
+            
+            let html = '';
+            newsItems.slice().reverse().forEach(item => {
+                html += `
+                    <div class="admin-news-item">
+                        <div class="admin-news-info">
+                            <div class="admin-news-title">${item.title}</div>
+                            <div class="admin-news-preview">${item.body.substring(0, 40)}${item.body.length > 40 ? '...' : ''}</div>
+                        </div>
+                        <span class="admin-news-delete" onclick="deleteNews('${item.id}')"><i class="fa-solid fa-trash"></i></span>
+                    </div>
+                `;
+            });
+            listDiv.innerHTML = html;
+        }
+
+        function deleteNews(id) {
+            newsItems = newsItems.filter(item => item.id != id);
+            saveNewsToStorage();
+            renderNewsFeed();
+            renderAdminNews();
+            showToast('নিউজ ডিলিট হয়েছে');
+        }
+
+        function deleteAllNews() {
+            if (confirm('সব নিউজ ডিলিট করার বিষয়ে নিশ্চিত?')) {
+                newsItems = [];
+                saveNewsToStorage();
+                renderNewsFeed();
+                renderAdminNews();
+                showToast('সব নিউজ ডিলিট হয়েছে');
+            }
+        }
+
+        function addNewsItem() {
+            const title = document.getElementById('admin-news-title').value.trim();
+            const body = document.getElementById('admin-news-body').value.trim();
+            
+            if (!title || !body) {
+                alert('টাইটেল এবং বিবরণ দিন');
+                return;
+            }
+            
+            const newItem = {
+                id: Date.now().toString(),
+                title: title,
+                body: body,
+                time: Date.now()
+            };
+            
+            newsItems.push(newItem);
+            saveNewsToStorage();
+            renderNewsFeed();
+            renderAdminNews();
+            clearNewsInputs();
+            showToast('নিউজ যোগ হয়েছে');
+        }
+
+        function clearNewsInputs() {
+            document.getElementById('admin-news-title').value = '';
+            document.getElementById('admin-news-body').value = '';
+        }
+
+        // অ্যাডমিন প্যানেল ফাংশন
+        function openAdminPanel() {
+            document.getElementById('admin-default-secret').value = localStorage.getItem('rog_secret') || 'JBSWY3DPEHPK3PXP';
+            document.getElementById('admin-otp-timer').value = localStorage.getItem('rog_timer') || '30';
+            document.getElementById('admin-site-status').value = localStorage.getItem('rog_status') || 'active';
+            document.getElementById('admin-brand').value = localStorage.getItem('rog_brand') || 'ROG HUB';
+            document.getElementById('admin-notice').value = localStorage.getItem('rog_notice') || '';
+            
+            renderAdminNews();
+            document.getElementById('adminOverlay').style.display = 'flex';
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminOverlay').style.display = 'none';
+        }
+
+        function saveAdminSettings() {
+            const secret = document.getElementById('admin-default-secret').value;
+            const timer = document.getElementById('admin-otp-timer').value;
+            const status = document.getElementById('admin-site-status').value;
+            const brand = document.getElementById('admin-brand').value;
+            const notice = document.getElementById('admin-notice').value;
+            
+            localStorage.setItem('rog_secret', secret);
+            localStorage.setItem('rog_timer', timer);
+            localStorage.setItem('rog_status', status);
+            localStorage.setItem('rog_brand', brand);
+            localStorage.setItem('rog_notice', notice);
+            
+            document.getElementById('main-brand').innerHTML = brand + ' <span style="font-weight: 300; opacity: 0.5;">HUB</span>';
+            
+            timerSeconds = parseInt(timer);
+            startOtpTimer(timerSeconds);
+            
+            if (status === 'maintenance') {
+                document.getElementById('maintenance-overlay').style.display = 'flex';
+                document.getElementById('maintenance-text').textContent = notice || 'নেটওয়ার্ক ইনফ্রাস্ট্রাকচার আপগ্রেড করা হচ্ছে।';
+                document.getElementById('block-overlay').style.display = 'none';
+            } else if (status === 'blocked') {
+                document.getElementById('block-overlay').style.display = 'flex';
+                document.getElementById('maintenance-overlay').style.display = 'none';
+            } else {
+                document.getElementById('maintenance-overlay').style.display = 'none';
+                document.getElementById('block-overlay').style.display = 'none';
+            }
+            
+            showToast('সেটিংস সংরক্ষিত');
+            closeAdminPanel();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // ইনপুট ইভেন্ট লিসেনার
+        document.addEventListener('DOMContentLoaded', function() {
+            const secretInput = document.getElementById('secret-input');
+            
+            secretInput.addEventListener('paste', function(e) {
+                setTimeout(() => {
+                    processSecret(secretInput.value);
+                }, 100);
+            });
+            
+            secretInput.addEventListener('input', function() {
+                if (secretInput.value.length >= 16) {
+                    processSecret(secretInput.value);
+                }
+            });
+        });
+
+        // লোড ইভেন্ট
+        window.onload = function() {
+            const savedPrimary = localStorage.getItem('rog_primary');
+            const savedSecondary = localStorage.getItem('rog_secondary');
+            if (savedPrimary) setTheme(savedPrimary, savedSecondary || savedPrimary);
+            
+            const savedSecret = localStorage.getItem('rog_secret');
+            const savedTimer = localStorage.getItem('rog_timer');
+            const savedBrand = localStorage.getItem('rog_brand');
+            const savedStatus = localStorage.getItem('rog_status');
+            const savedNotice = localStorage.getItem('rog_notice');
+            
+            if (savedSecret) {
+                document.getElementById('secret-input').value = savedSecret;
+                currentSecret = savedSecret;
+            }
+            
+            if (savedBrand) document.getElementById('main-brand').innerHTML = savedBrand + ' <span style="font-weight: 300; opacity: 0.5;">HUB</span>';
+            
+            timerSeconds = savedTimer ? parseInt(savedTimer) : 30;
+            startOtpTimer(timerSeconds);
+            
+            saveNewsToStorage();
+            renderNewsFeed();
+            
+            if (savedStatus === 'maintenance') {
+                document.getElementById('maintenance-overlay').style.display = 'flex';
+                document.getElementById('maintenance-text').textContent = savedNotice || 'নেটওয়ার্ক ইনফ্রাস্ট্রাকচার আপগ্রেড করা হচ্ছে।';
+            } else if (savedStatus === 'blocked') {
+                document.getElementById('block-overlay').style.display = 'flex';
+            }
+        };
+    </script>
+</body>
+</html>
